@@ -17,5 +17,8 @@
     "express": "^5.1.0",
     "sass": "^1.88.0",
     "vite-plugin-handlebars": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=19.0.0"
   }
 }
