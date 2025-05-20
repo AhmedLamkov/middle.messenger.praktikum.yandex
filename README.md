@@ -3,13 +3,20 @@
 Данный проект является мессенджером, здесь есть авторизация, регистрация, сам чат и изменение данных пользователя.
 Версия Node 19.0.0
 
+### Дизайн
+
+https://www.figma.com/design/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=1-2&t=BfT4t75JUXQNRKIA-0
+
 ### Ссылка на проект
 
-https://velvety-dango-00dc53.netlify.app/
+https://ahmedmessenger.netlify.app/
+
+### Ссылка на проект
+
+Страницы генерятся на https://ahmedmessenger.netlify.app/ отсюда можно попасть на все другие страницы
 
 ### Команды для работы с проектом
 
-- `npm install` — установка стабильной версии,
+- `npm install` — установка зависимости проекта,
 - `npm run start` — запуск версии для разработчика на 3000 порту,
-- `npm run dev` — запуск проекта локально,
 - `npm run build:prod` — сборка стабильной версии.
