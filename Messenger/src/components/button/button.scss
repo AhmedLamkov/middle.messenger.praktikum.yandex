@@ -1,0 +1,24 @@
+.button {
+	padding: 12px 70px;
+	font-size: 13px;
+	line-height: 13px;
+	color: rgba(255, 255, 255, 1);
+	background:rgba(51, 105, 243, 1) ;
+
+	&__link {
+		border: none;
+		color:rgba(51, 105, 243, 1) ;
+		background: inherit;
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	&__back {
+		padding: 0;
+		color: rgba(51, 105, 243, 1);
+		background: inherit;
+		border: none;
+	}
+}

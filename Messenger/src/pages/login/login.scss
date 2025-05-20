@@ -1,0 +1,23 @@
+.login {
+	max-width: 340px;
+	margin: 0 auto;
+	padding: 50px 30px 30px 30px;
+	border-radius: 12px;
+	box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.14);
+
+	&__title {
+		font-size: 20px;
+		line-height: 20px;
+		margin-bottom: 40px;
+	}
+
+	&__wrapper {
+		margin-bottom: 160px;
+	}
+
+	&__btns {
+		display: flex;
+		flex-direction: column;
+		row-gap: 14px;
+	}
+}

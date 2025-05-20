@@ -1,0 +1,41 @@
+.dialog {
+	display: none;
+	background-color: rgba(0, 0, 0, .7);
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	top: 0;
+
+	&__container {
+		background-color: white;
+    border-radius: 12px ;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 340px;
+    padding: 40px 30px;
+	}
+
+	&__title {
+		font-size: 15px;
+		line-height: 20px;
+		margin-bottom: 43px;
+	}
+
+	.input {
+		padding: 0;
+	}
+
+	.input__container {
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		margin-bottom: 45px;
+		height: fit-content;
+	}
+
+	&.open {
+		display: block;
+	}
+}
