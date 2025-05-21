@@ -1,0 +1,74 @@
+.editProfile {
+	margin: 0 auto;
+	max-width: 510px;
+	position: relative;
+
+	&__wrapper {
+		margin-bottom: 60px;
+	}
+
+	&__back {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		background:rgba(251, 251, 251, 1) ;
+		padding: 0 18px;
+		height: 100vh;
+	}
+
+	&__background {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: rgba(239, 239, 239, 1);
+		width: 130px;
+		height: 130px;
+		border-radius: 50%;
+		margin: 0 auto;
+		margin-bottom: 21px;
+		cursor: pointer;
+	}
+
+	&__icon {
+		cursor: pointer;
+		background: url(../../assets/icons/arrow-blue.svg);
+		background-size: contain;
+		background-repeat: no-repeat;
+		width: 28px;
+		height: 28px;
+	}
+
+	&__item {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-bottom: 10px;
+		border-bottom: 1px solid rgba(234, 234, 234, 1);
+		margin-bottom: 10px;
+		font-size: 13px;
+		line-height: 13px;
+	}
+
+	&__label {
+		font-weight: 500;
+	}
+
+	.input {
+		padding: 0;
+
+		&__container {
+			display: inline;
+		}
+	}
+}
+
+.edit {
+	border: none;
+	padding: 0;
+	text-align: right;
+}

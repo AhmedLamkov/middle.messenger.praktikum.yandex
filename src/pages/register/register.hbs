@@ -1,0 +1,19 @@
+<main class="register">
+  <h1 class="register__title">Регистрация</h1>
+  <form class="register__form">
+    <div class="register__wrapper error">
+			{{> Input label="Почта" name="email" type="email"}}
+      {{> Input label="Логин" name="login" type="text" }}
+			{{> Input label="Имя" name="first_name" type="text"}}
+			{{> Input label="Фамилия" name="second_name" type="text"}}
+			{{> Input label="Телефон" name="phone" type="tel"}}
+      {{> Input label="Пароль" class="error" name="password" type="password" }}
+			{{> Input label="Пароль(еще раз)" class="error" name="password" type="password" }}
+			<div class="error"> Пароли не совпадают</div>
+    </div>
+    <div class="register__btns">
+      {{> Button label="Зарегистрироваться" type="primary" }}
+      {{> Button label="Войти" type="link" }}
+    </div>
+  </form>
+</main>

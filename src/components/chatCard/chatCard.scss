@@ -1,0 +1,48 @@
+.chatCard {
+	display: flex;
+	justify-content: space-around;
+	padding: 10px;
+	cursor: pointer;
+	border-top: 1px solid rgba(234, 234, 234, 1);
+	border-bottom: 1px solid rgba(234, 234, 234, 1);
+
+	&__icon {
+		background: url(../../assets/photo.svg);
+		background-size: contain;
+		background-repeat: no-repeat;
+		width: 47px;
+		height: 47px;
+		margin-right: 10px;
+	}
+	
+	&__wrapper {
+		display: flex;
+		flex-direction: column;
+		width: 193px;
+		text-align: left;
+	}
+
+	&__title {
+		font-size: 13px;
+		line-height: 13px;
+		font-weight: 600;
+		margin-bottom: 4px;
+	}
+
+	&__description {
+		font-size: 12px;
+		line-height: 15px;
+		color:rgba(153, 153, 153, 1);
+		text-overflow: ellipsis;
+	}
+
+	&__date {
+		font-size: 9px;
+		line-height: 13px;
+		color:rgba(153, 153, 153, 1);
+	}
+
+	&__active {
+		background: rgba(228, 237, 253, 1);
+	}
+}

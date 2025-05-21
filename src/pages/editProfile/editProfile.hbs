@@ -1,0 +1,39 @@
+<main class="editProfile">
+	<form class="editProfile__wrapper">
+		<div class="editProfile__background" data-open-dialog>
+			<img class="editProfile__image" id="image" src="{{avatar}}" alt="Здесь должен быть ваш аватар">
+		</div>
+		<div class="editProfile__item">
+			<div class="editProfile__label">Почта</div>
+			{{> Input class="edit" type="email" name="email" placeholder="pochta@yandex.ru" }}
+		</div>
+		<div class="editProfile__item">
+			<div class="editProfile__label">Логин</div>
+			{{> Input class="edit" type="text" name="login" placeholder="ivanivanov" }}
+		</div>
+		<div class="editProfile__item">
+			<div class="editProfile__label">Имя</div>
+			{{> Input class="edit" type="text" name="first_name" placeholder="Иван" }}
+		</div>
+		<div class="editProfile__item">
+			<div class="editProfile__label">Фамилия</div>
+			{{> Input class="edit" type="text" name="second_name" placeholder="Иванов" }}
+		</div>
+		<div class="editProfile__item">
+			<div class="editProfile__label">Имя в чате</div>
+			{{> Input class="edit" type="text" name="display_name" placeholder="Иван" }}
+		</div>
+		<div class="editProfile__item">
+			<div class="editProfile__label">Телефон</div>
+			{{> Input class="edit" type="tel" name="phone" placeholder=" +7 (909) 967 30 30" }}
+		</div>
+	</form>
+</main>
+{{> Button label="Сохранить" type="save" }}
+<div class="editProfile__back">
+		<div class="profile__icon"></div>
+</div>
+
+{{#if showDialog}}
+	{{#> Dialog}}{{/ Dialog}}
+{{/if}}
