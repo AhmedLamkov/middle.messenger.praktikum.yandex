@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .input {
 	position: relative;
 	padding: 10px;
@@ -15,11 +17,11 @@
 		padding: 0%;
 		font-size: 13px;
 		line-height: 13px;
-		border-bottom: 1px solid rgba(51, 105, 243, 1);
+		border-bottom: 1px solid colors.$blue;
 		padding-bottom: 7px;
 
 		&.error {
-			color: rgba(255, 47, 47, 1);
+			color: colors.$light-red;
 		}
 	}
 
@@ -27,7 +29,7 @@
 		transform: translateY(-21px);
 		font-size: 9px;
 		line-height: 9px;
-		color: rgba(153, 153, 153, 1);
+		color: colors.$dark-grey;
 		transition:
       font-size 0.5s,
       transform 0.5s;
@@ -60,8 +62,8 @@
 	width: 150px;
 	font-size: 12px;
 	line-height: 16px;
-	color:rgba(51, 105, 243, 1);
-	text-decoration: underline rgba(51, 105, 243, 1);
+	color:colors.$blue;
+	text-decoration: underline colors.$blue;
 	text-underline-offset: 4px;
 	transform: translateY(0);
 	align-items: center;

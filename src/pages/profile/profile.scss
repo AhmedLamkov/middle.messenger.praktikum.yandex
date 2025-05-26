@@ -1,3 +1,5 @@
+@use '../../colors';
+
 .profile {
 	margin: 0 auto;
 	max-width: 510px;
@@ -11,7 +13,7 @@
 		left: 0;
 		top: 50%;
 		transform: translateY(-50%);
-		background:rgba(251, 251, 251, 1) ;
+		background: colors.$light-grey;
 		padding: 0 18px;
 		height: 100vh;
 	}
@@ -20,7 +22,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: rgba(239, 239, 239, 1);
+		background: colors.$more-dark-grey;
 		width: 130px;
 		height: 130px;
 		border-radius: 50%;
@@ -50,7 +52,7 @@
 		display: flex;
 		justify-content: space-between;
 		padding-bottom: 10px;
-		border-bottom: 1px solid rgba(234, 234, 234, 1);
+		border-bottom: 1px solid colors.$grey;
 		margin-bottom: 10px;
 		font-size: 13px;
 		line-height: 13px;
@@ -61,7 +63,7 @@
 	}
 
 	&__text {
-		color: rgba(153, 153, 153, 1) ;
+		color: colors.$dark-grey;
 	}
 
 	&__actions {
@@ -72,7 +74,7 @@
 		cursor: pointer;
 		font-size: 13px;
 		line-height: 13px;
-		color: rgba(51, 105, 243, 1);
+		color: colors.$blue;
 	}
 
 	&__exit {
@@ -80,6 +82,6 @@
 		text-align: left;
 		font-size: 13px;
 		line-height: 13px;
-		color: rgba(255, 0, 0, 1) ;
+		color: colors.$red;
 	}
 }

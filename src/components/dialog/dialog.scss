@@ -1,6 +1,8 @@
+@use '../../colors';
+
 .dialog {
 	display: none;
-	background-color: rgba(0, 0, 0, .7);
+	background-color: colors.$modal-shadow;
 	height: 100%;
 	width: 100%;
 	position: fixed;
