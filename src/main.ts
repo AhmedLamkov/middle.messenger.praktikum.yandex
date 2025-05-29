@@ -3,47 +3,44 @@ import './reset.scss';
 import './style.scss';
 import * as Components from './components';
 import * as Pages from './pages';
+import renderDOM from "./core/renderDom";
+import type { PageInfo } from './types';
 
 import avatar from './assets/avatar.svg';
 
-const pages = {
-  'login': [ Pages.LoginPage ],
-  'error': [ Pages.ErrorPage ],
-  'editProfile': [ Pages.EditProfilePage, {
+const pages: Record<string, PageInfo> = {
+  login: { source: Pages.LoginPage },
+  error: { source: Pages.ErrorPage },
+  editProfile: { source: Pages.EditProfilePage, 
     name: 'avatar', avatar: avatar, showDialog: true,
-  }],
-  'notFound': [ Pages.NotFoundPage ],
-  'profile': [ Pages.ProfilePage, {
+  },
+  notFound: { source: Pages.NotFoundPage },
+  profile: { source: Pages.ProfilePage, 
     name: 'avatar', avatar: avatar,
-  }],
-  'register': [ Pages.RegisterPage ],
-  'resetPassword': [ Pages.ResetPasswordPage, {
+  },
+  register: { source: Pages.RegisterPage },
+  resetPassword: { source: Pages.ResetPasswordPage, 
     name: 'avatar', avatar: avatar
-  }],
-  'chats': [ Pages.ChatsPage, {
-    chat: [
-      {name: 'Андрей', message: 'Изображение', date: '10:49'},
-      {name: 'Киноклуб', message: 'Вы: стикер', date: '10:49'},
-      {name: 'Илья', message: 'Друзья, у меня для вас особенный выпуск новостей!...', date: '10:49'},
-      {name: 'Вадим', message: 'Вы: Круто!', date: '10:49', active: true},
-      {name: 'тет-а-теты', message: 'И Human Interface Guidelines и Material Design рекомендуют...', date: '10:49'},
-      {name: '1,2,3', message: 'Миллионы россиян ежедневно проводят десятки часов свое...', date: '10:49'},
-      {name: 'Design Destroyer', message: 'В 2008 году художник Jon Rafman начал собирать...', date: '10:49'},
-      {name: 'Day.', message: 'Так увлёкся работой по курсу, что совсем забыл его анонсир...', date: '10:49'},
-      {name: 'Стас Рогозин', message: 'Можно или сегодня или завтра вечером.', date: '10:49'},
-    ],
-  }],
-  'nav': [ Pages.NavigatePage ]
+  },
+  chats: { source: Pages.ChatsPage },
+  nav: { source: Pages.NavigatePage }
 };
 
 Object.entries(Components).forEach(([ name, template ]) => {
-  console.log(name, template)
+  if (typeof template === "function") {
+    return;
+  }
   Handlebars.registerPartial(name, template);
 });
 
 function navigate(page: string) {
-  //@ts-ignore
-  const [ source, context ] = pages[page];
+
+  const { source, ...context } = pages[page];
+  if (typeof source === "function") {
+    renderDOM(new source({}));
+    return;
+  }
+
   const container = document.getElementById('app')!;
 
   const temlpatingFunction = Handlebars.compile(source);

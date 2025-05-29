@@ -1,9 +1,11 @@
 import EventBus from "./eventBus";
 import { nanoid } from "nanoid";
 import Handlebars from "handlebars";
+import type { BlockMeta, Props } from "./types";
+
 
 // Нельзя создавать экземпляр данного класса
-export default class Block {
+export default class Block<T extends HTMLElement = any> {
   static EVENTS = {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
@@ -11,11 +13,14 @@ export default class Block {
     FLOW_RENDER: "flow:render",
   };
 
-  _element = null;
-  _meta = null;
+  _element: HTMLElement | null = null;
+  _meta: BlockMeta = {
+    tagName: 'div'
+  };
+  props: Props;
   _id = nanoid(6);
 	eventBus: () => EventBus<string>;
-	children: {};
+	children: Record<string, Block<T> | Block<T>[]> = {};
 
   /** JSDoc
    * @param {string} tagName
@@ -23,7 +28,7 @@ export default class Block {
    *
    * @returns {void}
    */
-  constructor(tagName = "div", propsWithChildren = {}) {
+  constructor(tagName = "div", propsWithChildren: Props = {}) {
     const eventBus = new EventBus();
     this.eventBus = () => eventBus;
 
@@ -51,16 +56,16 @@ export default class Block {
   _createResources() {
     const { tagName, props } = this._meta;
     this._element = this._createDocumentElement(tagName);
-    if (typeof props.className === "string") {
+    if (typeof props?.className === "string") {
       const classes = props.className.split(" ");
       this._element.classList.add(...classes);
     }
 
-    if (typeof props.attrs === "object") {
-      Object.entries(props.attrs).forEach(([attrName, attrValue]) => {
-        this._element.setAttribute(attrName, attrValue);
-      });
-    }
+    // if (typeof props?.attrs === "object") {
+    //   Object.entries(props.attrs).forEach(([attrName, attrValue]) => {
+    //     this._element?.setAttribute(attrName, attrValue);
+    //   });
+    // }
   }
 
   init() {
@@ -68,9 +73,9 @@ export default class Block {
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  _getChildrenAndProps(propsAndChildren) {
-    const children = {};
-    const props = {};
+  _getChildrenAndProps(propsAndChildren: Props) {
+    const children: Record<string, Block | Block[]> = {};
+    const props: Props = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (Array.isArray(value)) {
@@ -98,13 +103,13 @@ export default class Block {
     this.componentDidMount();
   }
 
-  componentDidMount(oldProps) {}
+  componentDidMount() {}
 
   dispatchComponentDidMount() {
-    this._eventBus().emit(Block.EVENTS.FLOW_CDM);
+    this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  _componentDidUpdate(oldProps, newProps) {
+  _componentDidUpdate(oldProps: Props, newProps: Props) {
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;
@@ -112,11 +117,11 @@ export default class Block {
     this._render();
   }
 
-  componentDidUpdate(oldProps, newProps) {
+  componentDidUpdate(oldProps: Props, newProps: Props) {
     return true;
   }
 
-  setProps = (nextProps) => {
+  setProps = (nextProps: Props) => {
     if (!nextProps) {
       return;
     }
@@ -132,7 +137,7 @@ export default class Block {
     const { events = {} } = this.props;
 
     Object.keys(events).forEach((eventName) => {
-      this._element.addEventListener(eventName, events[eventName]);
+      this._element?.addEventListener(eventName, events[eventName]);
     });
   }
 
@@ -140,7 +145,7 @@ export default class Block {
     const { events = {} } = this.props;
 
     Object.keys(events).forEach((eventName) => {
-      this._element.removeEventListener(eventName, events[eventName]);
+      this._element?.removeEventListener(eventName, events[eventName]);
     });
   }
 
@@ -157,7 +162,7 @@ export default class Block {
       }
     });
 
-    const fragment = this._createDocumentElement("template");
+    const fragment = this._createDocumentElement("template") as HTMLTemplateElement;
     const template = Handlebars.compile(this.render());
     fragment.innerHTML = template(propsAndStubs);
 
@@ -168,12 +173,17 @@ export default class Block {
             `[data-id="${component._id}"]`,
           );
 
-          stub?.replaceWith(component.getContent());
+          const element = component.getContent();
+          
+          Object.keys(this.props).forEach(key => element?.setAttribute(key, this.props[key]))
+          element && stub?.replaceWith(element);
         });
       } else {
         const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-
-        stub?.replaceWith(child.getContent());
+        const element = child.getContent()
+    
+        Object.keys(this.props).forEach(key => element?.setAttribute(key, this.props[key]))
+        element && stub?.replaceWith(element);
       }
     });
 
@@ -184,10 +194,10 @@ export default class Block {
     this._removeEvents();
     const block = this._compile();
 
-    if (this._element.children.length === 0) {
+    if (this._element?.children.length === 0) {
       this._element.appendChild(block);
     } else {
-      this._element.replaceChildren(block);
+      this._element?.replaceChildren(block);
     }
 
     this._addEvents();
@@ -201,7 +211,7 @@ export default class Block {
     return this.element;
   }
 
-  _makePropsProxy(props) {
+  _makePropsProxy(props: Props) {
     const eventBus = this.eventBus();
     const emitBind = eventBus.emit.bind(eventBus);
 
@@ -225,16 +235,16 @@ export default class Block {
     });
   }
 
-  _createDocumentElement(tagName) {
+  _createDocumentElement(tagName: string) {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName);
   }
 
-  show() {
-    this.getContent().style.display = "block";
-  }
+  // show() {
+  //   this.getContent().style.display = "block";
+  // }
 
-  hide() {
-    this.getContent().style.display = "none";
-  }
+  // hide() {
+  //   this.getContent().style.display = "none";
+  // }
 }
