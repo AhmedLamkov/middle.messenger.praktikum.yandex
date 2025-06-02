@@ -1,15 +1,16 @@
-import Block from "../../core/block";
-import type { Props } from "../../core/types";
+import Block from '../../core/block.ts';
+import type { Props } from '../../core/types';
 
 export default class NavigatePage extends Block {
-	constructor(props: Props | undefined ) {
-		super("nav", {
-			...props,
-		})
-	}
-	public render(): string {
-		return `
-			<ul>
+  constructor(props: Props | undefined) {
+    super('nav', {
+      ...props,
+    });
+  }
+
+  public render(): string {
+    return `
+      <ul>
         <li><a href="#" page="login">Вход</a></li>
         <li><a href="#" page="chats">Список чатов</a></li>
         <li><a href="#" page="register">Регистрация</a></li>
@@ -19,6 +20,6 @@ export default class NavigatePage extends Block {
         <li><a href="#" page="error">500</a></li>
         <li><a href="#" page="notFound">404</a></li>
     </ul>
-		`
-	}
+    `;
+  }
 }

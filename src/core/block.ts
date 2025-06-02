@@ -1,27 +1,32 @@
-import EventBus from "./eventBus";
-import { nanoid } from "nanoid";
-import Handlebars from "handlebars";
-import type { BlockMeta, Props } from "./types";
-
+import { nanoid } from 'nanoid';
+import Handlebars from 'handlebars';
+import EventBus from './eventBus.ts';
+import type { BlockMeta, Props } from './types';
 
 // Нельзя создавать экземпляр данного класса
 export default class Block<T extends HTMLElement = any> {
   static EVENTS = {
-    INIT: "init",
-    FLOW_CDM: "flow:component-did-mount",
-    FLOW_CDU: "flow:component-did-update",
-    FLOW_RENDER: "flow:render",
+    INIT: 'init',
+    FLOW_CDM: 'flow:component-did-mount',
+    FLOW_CDU: 'flow:component-did-update',
+    FLOW_RENDER: 'flow:render',
   };
 
   _element: HTMLElement | null = null;
+
   _meta: BlockMeta = {
-    tagName: 'div'
+    tagName: 'div',
   };
+
   props: Props;
+
   elementProps: HTMLElement;
+
   _id = nanoid(6);
-	eventBus: () => EventBus<string>;
-	children: Record<string, Block<T> | Block<T>[]> = {};
+
+  eventBus: () => EventBus<string>;
+
+  children: Record<string, Block<T> | Block<T>[]> = {};
 
   /** JSDoc
    * @param {string} tagName
@@ -29,7 +34,7 @@ export default class Block<T extends HTMLElement = any> {
    *
    * @returns {void}
    */
-  constructor(tagName = "div", propsWithChildren: Props = {}) {
+  constructor(tagName = 'div', propsWithChildren: Props = {}) {
     const eventBus = new EventBus();
     this.eventBus = () => eventBus;
 
@@ -58,8 +63,8 @@ export default class Block<T extends HTMLElement = any> {
   _createResources() {
     const { tagName, props } = this._meta;
     this._element = this._createDocumentElement(tagName);
-    if (typeof props?.className === "string") {
-      const classes = props.className.split(" ").filter(classname => classname !== 'undefined');
+    if (typeof props?.className === 'string') {
+      const classes = props.className.split(' ').filter((classname) => classname !== 'undefined');
       this._element.classList.add(...classes);
     }
   }
@@ -69,7 +74,7 @@ export default class Block<T extends HTMLElement = any> {
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  _getChildrenAndProps({ elementProps, ...propsAndChildren}: Props) {
+  _getChildrenAndProps({ elementProps, ...propsAndChildren }: Props) {
     const children: Record<string, Block | Block[]> = {};
     const props: Props = {};
 
@@ -114,7 +119,7 @@ export default class Block<T extends HTMLElement = any> {
   }
 
   componentDidUpdate(oldProps: Props, newProps: Props) {
-    return true;
+    return JSON.stringify(oldProps) !== JSON.stringify(newProps);
   }
 
   setProps = (nextProps: Props) => {
@@ -158,15 +163,16 @@ export default class Block<T extends HTMLElement = any> {
       }
     });
 
-    const fragment = this._createDocumentElement("template") as HTMLTemplateElement;
+    const fragment = this._createDocumentElement('template') as HTMLTemplateElement;
     const template = Handlebars.compile(this.render());
     fragment.innerHTML = template(propsAndStubs);
 
     const element = this.getContent();
-    this.elementProps && Object.keys(this.elementProps).forEach(key => {
+
+    this.elementProps && Object.keys(this.elementProps).forEach((key) => {
       const prop = this.elementProps[key as keyof HTMLElement];
-      prop && element?.setAttribute(key, prop.toString())
-    })
+      prop && element?.setAttribute(key, prop.toString());
+    });
 
     Object.values(this.children).forEach((child) => {
       if (Array.isArray(child)) {
@@ -176,12 +182,12 @@ export default class Block<T extends HTMLElement = any> {
           );
 
           const element = component.getContent();
-          
+
           element && stub?.replaceWith(element);
         });
       } else {
         const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-        const element = child.getContent()
+        const element = child.getContent();
 
         element && stub?.replaceWith(element);
       }
@@ -204,7 +210,7 @@ export default class Block<T extends HTMLElement = any> {
   }
 
   render() {
-    return "";
+    return '';
   }
 
   getContent() {
@@ -218,19 +224,20 @@ export default class Block<T extends HTMLElement = any> {
     return new Proxy(props as any, {
       get(target, prop) {
         const value = target[prop];
-        return typeof value === "function" ? value.bind(target) : value;
+        return typeof value === 'function' ? value.bind(target) : value;
       },
       set(target, prop, value) {
         const oldTarget = { ...target };
-        target[prop] = value;
+        const newTarget = { ...target };
+        newTarget[prop] = value;
 
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
-        emitBind(Block.EVENTS.FLOW_CDU, oldTarget, target);
+        emitBind(Block.EVENTS.FLOW_CDU, oldTarget, newTarget);
         return true;
       },
       deleteProperty() {
-        throw new Error("Нет доступа");
+        throw new Error('Нет доступа');
       },
     });
   }

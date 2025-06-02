@@ -1,9 +1,9 @@
-import Block from "./block";
+import Block from './block.ts';
 
 export default function renderDOM(block: Block) {
-  const root = document.querySelector("#app");
+  const root = document.querySelector('#app');
 
-  root!.innerHTML = "";
+  root!.innerHTML = '';
   const element = block.getContent() as Node;
   element && root!.appendChild(element);
 }

@@ -1,2 +1,3 @@
-/build \*_/_.min.js
-/node_modules
+/build
+**/*.min.js
+/node_modules 

@@ -1,9 +1,9 @@
 export interface BlockMeta {
-	tagName: string;
-	props?: Record<string, any>;
+  tagName: string;
+  props?: Record<string, any>;
 }
 export interface PropsDialog extends Partial<HTMLElement> {
-	showDialog?: boolean;
+  showDialog?: boolean;
 }
 
 export type Props = Record<string, any>;

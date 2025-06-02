@@ -1,2 +1,3 @@
-import './chatCard.scss'
-export { default as ChatCard } from './chatCard';
+import './chatCard.scss';
+
+export { default as ChatCard } from './chatCard.ts';

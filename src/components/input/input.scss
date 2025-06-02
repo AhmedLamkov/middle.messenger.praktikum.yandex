@@ -6,6 +6,7 @@
 
 	&__container {
 		display: flex;
+		position: relative;
     height: 38px;
     flex-direction: column;
     align-content: flex-end;
@@ -30,9 +31,7 @@
 		font-size: 9px;
 		line-height: 9px;
 		color: colors.$dark-grey;
-		transition:
-      font-size 0.5s,
-      transform 0.5s;
+		transition: 0.5s;
 	}
 
 	&__icon {
@@ -53,10 +52,8 @@
 	}
 }
 
-.input__element:not(:placeholder-shown) + .input__label,
 .input__element:focus + .input__label {
   transform: translateY(-36px);
-  font-size: 9px;
 }
 
 .file {
