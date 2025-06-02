@@ -97,4 +97,3 @@ export default class ChatsPage extends Block {
 		`
 	}
 };
- 

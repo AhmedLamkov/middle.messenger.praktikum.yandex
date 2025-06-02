@@ -62,12 +62,6 @@ export default class Block<T extends HTMLElement = any> {
       const classes = props.className.split(" ").filter(classname => classname !== 'undefined');
       this._element.classList.add(...classes);
     }
-
-    // if (typeof props?.attrs === "object") {
-    //   Object.entries(props.attrs).forEach(([attrName, attrValue]) => {
-    //     this._element?.setAttribute(attrName, attrValue);
-    //   });
-    // }
   }
 
   init() {
@@ -245,12 +239,4 @@ export default class Block<T extends HTMLElement = any> {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName);
   }
-  
-  // show() {
-  //   this.getContent().style.display = "block";
-  // }
-
-  // hide() {
-  //   this.getContent().style.display = "none";
-  // }
 }

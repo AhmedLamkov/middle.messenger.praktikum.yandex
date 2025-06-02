@@ -20,7 +20,7 @@ export default class Dialog extends Block {
 				label:"Поменять",
 				type: "submit",
 				events: {
-					click: (e) => this.SubmitFile(e)
+					click: () => this.SubmitFile()
 				}
 			})
 		})
@@ -38,7 +38,7 @@ export default class Dialog extends Block {
 		}
 	}
 
-	private SubmitFile(e: Event) {
+	private SubmitFile() {
 		this.element?.querySelector('.dialog')?.classList.remove('open');
 	}
 
