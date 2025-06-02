@@ -9,22 +9,40 @@ export default class ChatsPage extends Block {
 			...props,
 			className: "chats",
 			ChatList: new ChatList({ chatUsers: chatUsers }),
-			InputSearch: new Input({
+			search: new Input({
 				placeholder: "Поиск",
 				className: "chats__search",
 				type:"text",
 				name:"message",
 				icon: true
 			}),
-			InputMessage: new Input({
+			message: new Input({
 				placeholder: "Сообщение",
 				className: "chats__input",
 				type:"text",
 				name:"message",
+				events: {
+					blur: () => this.ValidateMessage()
+				}
 			}),
 			
 		})
 	}
+	private ValidateMessage () {
+		const message = this.children.message as Block;
+		const messageElement = message.element?.querySelector('input') as HTMLInputElement;
+
+		let error = "";
+		if(messageElement.value.trim() === '') {
+			error = "Сообщение не должно быть пустым"
+		}
+		if (Array.isArray(message)) {
+			message.forEach(child => child.setProps({ error }))
+		} else {
+			message.setProps({ error })
+		}
+	}
+
 	public render(): string {
 		return `
 			<div class="chats__profiles">
@@ -34,7 +52,7 @@ export default class ChatsPage extends Block {
 	          <div class="chats__arrowLink"></div>
 	        </a>
 	      </nav>
-	        {{{ InputSearch }}}
+	        {{{ search }}}
 	        <div class="chats__iconSearch"></div>
 	        {{{ ChatList }}}
     	</div>
@@ -71,7 +89,7 @@ export default class ChatsPage extends Block {
 	      <div class="chats__sendMessage">
 	        <div class="chats__clip"></div>
 	        <div class="chats__sendText">
-	          {{{ InputMessage }}}
+	          {{{ message }}}
 	          <div class="chats__arrow"></div>
 	        </div>
 	      </div>

@@ -1,15 +1,16 @@
 import Block from "../../core/block";
 
-type InputProps = {
+interface InputProps extends Partial<HTMLInputElement> {
 	className?: string;
-  onChange?: () => void;
-  onBlur?: () => void;
+	events?: Record<string, (e: Event) => void>;
 };
 
 export default class Input extends Block {
-  constructor(props: InputProps) {
+  constructor({ events, className, ...elementProps }: InputProps) {
     super("input", {
-      ...props,
+      events,
+      className,
+      elementProps,
     });
   }
 }

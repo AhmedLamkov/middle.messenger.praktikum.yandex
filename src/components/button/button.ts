@@ -1,18 +1,20 @@
 import Block from "../../core/block";
 
-type ButtonProps = {
+interface ButtonProps extends Partial<Button> {
   type?: string;
   label: string;
+  events?: Record<string, (e: Event) => void>;
 	className?: string;
-  onChange?: () => void;
-  onBlur?: () => void;
 };
 
 export default class Button extends Block {
-  constructor(props: ButtonProps) {
+  constructor({className, type, events, label, ...elementProps }: ButtonProps) {
     super("button", {
-      ...props,
-      className: `button button__${props.className}`,
+      elementProps,
+      label,
+      type,
+      className: `button ${className}`,
+      events: { ...events },
     });
   }
   public render(): string {

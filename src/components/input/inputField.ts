@@ -1,36 +1,36 @@
 import Input  from "./input";
 import Block from "../../core/block";
 
-type InputFieldProps = {
+interface InputFieldProps extends Partial<HTMLInputElement> {
   label?: string;
-	name: string;
-	type: string;
-	className?:string;
+  error?: string;
+	events?: Record<string, (e: Event) => void>;
 	icon?: boolean;
-	placeholder?: string;
-  onChange?: () => void;
-  onBlur?: () => void;
 };
 
 export default class InputField extends Block {
-	constructor(props: InputFieldProps) {
+	constructor({ label, error, events, icon, className, ...elementProps }: InputFieldProps) {
 		super("div", {
-			...props,
-			className: `input`,
-			placeholder: props.placeholder || "",
-			label: props.label,
-			icon: props.icon,
+			className: `input ${className}`,
+			label,
+			error,
+			icon,
 			Input: new Input({
-				className: `input__element ${props.className}`
+				className: `input__element`,
+				events: { ...events },
+				...elementProps,
 			})
 		});
 	}
+	
 	public render(): string {
     return `
         <label class="input__container">
           {{{ Input }}}
           <div class="input__label">{{label}}</div>
-					<div class="input__error">{{#if error}}{{error}}{{/if}}</div>
+					{{#if error}}
+						<div class="input__error">{{error}}</div>
+					{{/if}}
 					{{#if icon}}
 	            <div class="input__icon"></div>
 	        {{/if}}

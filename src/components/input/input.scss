@@ -45,6 +45,12 @@
 		left: 34%;
 		top: 8px;
 	}
+
+	&__error {
+		font-size: 8px;
+		line-height: 8px;
+		color: colors.$light-red;
+	}
 }
 
 .input__element:not(:placeholder-shown) + .input__label,
@@ -54,17 +60,21 @@
 }
 
 .file {
-	display: none;
-	z-index: -1;
+	.input__element {
+		display: none;
+		z-index: -1;
+	}
+
+	.input__element + .input__label {
+		width: 150px;
+		font-size: 12px;
+		line-height: 16px;
+		color:colors.$blue;
+		text-decoration: underline colors.$blue;
+		text-underline-offset: 4px;
+		transform: translateY(0);
+		align-items: center;
+	}
 }
 
-.input__element.file + .input__label {
-	width: 150px;
-	font-size: 12px;
-	line-height: 16px;
-	color:colors.$blue;
-	text-decoration: underline colors.$blue;
-	text-underline-offset: 4px;
-	transform: translateY(0);
-	align-items: center;
-}
+

@@ -18,6 +18,7 @@ export default class Block<T extends HTMLElement = any> {
     tagName: 'div'
   };
   props: Props;
+  elementProps: HTMLElement;
   _id = nanoid(6);
 	eventBus: () => EventBus<string>;
 	children: Record<string, Block<T> | Block<T>[]> = {};
@@ -32,8 +33,9 @@ export default class Block<T extends HTMLElement = any> {
     const eventBus = new EventBus();
     this.eventBus = () => eventBus;
 
-    const { props, children } = this._getChildrenAndProps(propsWithChildren);
+    const { props, children, elementProps } = this._getChildrenAndProps(propsWithChildren);
     this.children = children;
+    this.elementProps = elementProps;
 
     this._meta = {
       tagName,
@@ -57,7 +59,7 @@ export default class Block<T extends HTMLElement = any> {
     const { tagName, props } = this._meta;
     this._element = this._createDocumentElement(tagName);
     if (typeof props?.className === "string") {
-      const classes = props.className.split(" ");
+      const classes = props.className.split(" ").filter(classname => classname !== 'undefined');
       this._element.classList.add(...classes);
     }
 
@@ -73,7 +75,7 @@ export default class Block<T extends HTMLElement = any> {
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
-  _getChildrenAndProps(propsAndChildren: Props) {
+  _getChildrenAndProps({ elementProps, ...propsAndChildren}: Props) {
     const children: Record<string, Block | Block[]> = {};
     const props: Props = {};
 
@@ -96,7 +98,7 @@ export default class Block<T extends HTMLElement = any> {
       }
     });
 
-    return { children, props };
+    return { children, props, elementProps };
   }
 
   _componentDidMount() {
@@ -166,6 +168,12 @@ export default class Block<T extends HTMLElement = any> {
     const template = Handlebars.compile(this.render());
     fragment.innerHTML = template(propsAndStubs);
 
+    const element = this.getContent();
+    this.elementProps && Object.keys(this.elementProps).forEach(key => {
+      const prop = this.elementProps[key as keyof HTMLElement];
+      prop && element?.setAttribute(key, prop.toString())
+    })
+
     Object.values(this.children).forEach((child) => {
       if (Array.isArray(child)) {
         child.forEach((component) => {
@@ -175,14 +183,12 @@ export default class Block<T extends HTMLElement = any> {
 
           const element = component.getContent();
           
-          Object.keys(this.props).forEach(key => element?.setAttribute(key, this.props[key]))
           element && stub?.replaceWith(element);
         });
       } else {
         const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
         const element = child.getContent()
-    
-        Object.keys(this.props).forEach(key => element?.setAttribute(key, this.props[key]))
+
         element && stub?.replaceWith(element);
       }
     });
@@ -239,7 +245,7 @@ export default class Block<T extends HTMLElement = any> {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName);
   }
-
+  
   // show() {
   //   this.getContent().style.display = "block";
   // }

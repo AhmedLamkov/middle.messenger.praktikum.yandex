@@ -1,10 +1,14 @@
 import Block from "../../core/block";
-import type { Props } from "../../core/types";
+import type { PropsDialog } from "../../core/types";
+import { Dialog } from "../../components";
+import avatar from "../../assets/avatar.svg";
+
 
 export default class ProfilePage extends Block {
-	constructor(props: Props | undefined) {
+	constructor(props: PropsDialog) {
 		super("main", {
 			...props,
+			Dialog:  new Dialog({}) 
 		})
 	}
 	public render(): string {
@@ -12,7 +16,7 @@ export default class ProfilePage extends Block {
 			<div class="profile">
 				<div class="profile__wrapper">
 					<div class="profile__background" data-open-dialog>
-						<img class="profile__image" id="image" src="{{avatar}}" alt="Здесь должен быть ваш аватар">
+						<img class="profile__image" id="image" src="${avatar}" alt="Здесь должен быть ваш аватар">
 					</div>
 					<h1 class="profile__title">Иван</h1>
 					<div class="profile__item">
@@ -54,7 +58,7 @@ export default class ProfilePage extends Block {
 			<div class="profile__icon"></div>
 		</div>
 		{{#if showDialog}}
-			{{#> Dialog}}{{/ Dialog}}
+			{{{ Dialog }}}
 		{{/if}}
 		`
 	}

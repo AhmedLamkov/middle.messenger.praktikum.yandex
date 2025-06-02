@@ -11,7 +11,7 @@
 	background: colors.$blue;
 	cursor: pointer;
 
-	&__link {
+	&.link {
 		border: none;
 		color: colors.$blue;
 		background: inherit;
@@ -21,7 +21,7 @@
 		outline: none;
 	}
 
-	&__back {
+	&.back {
 		padding: 0;
 		color:  colors.$blue;
 		background: inherit;

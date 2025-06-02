@@ -6,22 +6,18 @@ import * as Pages from './pages';
 import renderDOM from "./core/renderDom";
 import type { PageInfo } from './types';
 
-import avatar from './assets/avatar.svg';
-
 const pages: Record<string, PageInfo> = {
   login: { source: Pages.LoginPage },
   error: { source: Pages.ErrorPage },
   editProfile: { source: Pages.EditProfilePage, 
-    name: 'avatar', avatar: avatar, showDialog: true,
+    showDialog: true,
   },
   notFound: { source: Pages.NotFoundPage },
   profile: { source: Pages.ProfilePage, 
-    name: 'avatar', avatar: avatar,
+    showDialog: true,
   },
   register: { source: Pages.RegisterPage },
-  resetPassword: { source: Pages.ResetPasswordPage, 
-    name: 'avatar', avatar: avatar
-  },
+  resetPassword: { source: Pages.ResetPasswordPage },
   chats: { source: Pages.ChatsPage },
   nav: { source: Pages.NavigatePage }
 };
@@ -37,7 +33,11 @@ function navigate(page: string) {
 
   const { source, ...context } = pages[page];
   if (typeof source === "function") {
-    renderDOM(new source({}));
+
+    renderDOM(new source(context));
+
+    const dialog = document.querySelector('.dialog');
+    dialog && setupDialog();
     return;
   }
 
@@ -48,6 +48,7 @@ function navigate(page: string) {
 
   const dialog = document.querySelector('.dialog');
   dialog && setupDialog();
+  
 }
 
 
@@ -73,6 +74,8 @@ const setupDialog = () => {
 		dialog?.classList.add('open');
 	});
 
+  
+
   dialog?.addEventListener('click', (event) => {
     //@ts-ignore
     
@@ -82,7 +85,7 @@ const setupDialog = () => {
   });
 
   document?.addEventListener('keydown', (event) => {
-    //@ts-ignore
+ 
     if (event.key === "Escape") {
       dialog?.classList.remove('open');
     }

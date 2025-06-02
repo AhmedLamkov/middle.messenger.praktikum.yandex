@@ -39,11 +39,13 @@
 	}
 
 	&__search{
-		position: relative;
-		border: none;
+		.input__element {
+			position: relative;
+			border: none;
 
-		&::placeholder {
-			text-align: center;
+			&::placeholder {
+				text-align: center;
+			}
 		}
 	}
 
@@ -202,9 +204,11 @@
 	}
 
 	&__input {
-		border: none;
-		padding: 10px 20px;
-		border-radius: 30px;
-		background: colors.$more-dark-grey;
+		.input__element {
+			border: none;
+			padding: 10px 20px;
+			border-radius: 30px;
+			background: colors.$more-dark-grey;
+		}
 	}
 }

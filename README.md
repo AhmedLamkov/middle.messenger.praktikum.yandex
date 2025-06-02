@@ -11,9 +11,13 @@ https://www.figma.com/design/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=1
 
 https://ahmedmessenger.netlify.app/
 
-### Ссылка на проект
+### Ссылка на страницы
 
 Страницы генерятся на https://ahmedmessenger.netlify.app/ отсюда можно попасть на все другие страницы
+
+### Функциональность
+
+Добавил валидацию полей и реализовал по клику, чтобы открывалась модалка на смену аватара
 
 ### Команды для работы с проектом
 
