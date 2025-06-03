@@ -1,9 +1,12 @@
+@use '../../colors';
+
 .input {
 	position: relative;
 	padding: 10px;
 
 	&__container {
 		display: flex;
+		position: relative;
     height: 38px;
     flex-direction: column;
     align-content: flex-end;
@@ -15,11 +18,11 @@
 		padding: 0%;
 		font-size: 13px;
 		line-height: 13px;
-		border-bottom: 1px solid rgba(51, 105, 243, 1);
+		border-bottom: 1px solid colors.$blue;
 		padding-bottom: 7px;
 
 		&.error {
-			color: rgba(255, 47, 47, 1);
+			color: colors.$light-red;
 		}
 	}
 
@@ -27,10 +30,8 @@
 		transform: translateY(-21px);
 		font-size: 9px;
 		line-height: 9px;
-		color: rgba(153, 153, 153, 1);
-		transition:
-      font-size 0.5s,
-      transform 0.5s;
+		color: colors.$dark-grey;
+		transition: 0.5s;
 	}
 
 	&__icon {
@@ -43,26 +44,35 @@
 		left: 34%;
 		top: 8px;
 	}
+
+	&__error {
+		font-size: 8px;
+		line-height: 8px;
+		color: colors.$light-red;
+	}
 }
 
 .input__element:not(:placeholder-shown) + .input__label,
 .input__element:focus + .input__label {
   transform: translateY(-36px);
-  font-size: 9px;
 }
 
 .file {
-	display: none;
-	z-index: -1;
+	.input__element {
+		display: none;
+		z-index: -1;
+	}
+
+	.input__element + .input__label {
+		width: 150px;
+		font-size: 12px;
+		line-height: 16px;
+		color:colors.$blue;
+		text-decoration: underline colors.$blue;
+		text-underline-offset: 4px;
+		transform: translateY(0);
+		align-items: center;
+	}
 }
 
-.input__element.file + .input__label {
-	width: 150px;
-	font-size: 12px;
-	line-height: 16px;
-	color:rgba(51, 105, 243, 1);
-	text-decoration: underline rgba(51, 105, 243, 1);
-	text-underline-offset: 4px;
-	transform: translateY(0);
-	align-items: center;
-}
+

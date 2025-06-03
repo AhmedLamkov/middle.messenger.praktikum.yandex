@@ -1,2 +1,3 @@
-import './editProfile.scss'
-export { default as EditProfilePage } from './editProfile.hbs?raw';
+import './editProfile.scss';
+
+export { default as EditProfilePage } from './editProfile.ts';

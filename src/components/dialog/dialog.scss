@@ -1,6 +1,8 @@
+@use '../../colors';
+
 .dialog {
 	display: none;
-	background-color: rgba(0, 0, 0, .7);
+	background-color: colors.$modal-shadow;
 	height: 100%;
 	width: 100%;
 	position: fixed;
@@ -15,12 +17,61 @@
     transform: translate(-50%, -50%);
     min-width: 340px;
     padding: 40px 30px;
+
+		&.error {
+			.dialog__error {
+				display: block;
+				font-size: 11px;
+				line-height: 11px;
+				color: colors.$red;
+				margin-top: 14px;
+			}
+			
+		}
+		&.selected {
+			.dialog__title{
+				display: none;
+			}
+
+			.input {
+				display: none;
+			}
+
+			.dialog__fileName {
+				display: block;
+				margin-bottom: 60px;
+				cursor: pointer;
+				font-size: 14px;
+				line-height: 15px;
+				font-weight: 500;
+				color: colors.$file-grey;
+			}
+
+			.dialog__selected {
+				display: block;
+				font-size: 15px;
+				line-height: 20px;
+				margin-bottom: 43px;
+			}
+		}
 	}
 
 	&__title {
 		font-size: 15px;
 		line-height: 20px;
 		margin-bottom: 43px;
+	}
+
+	&__error {
+		display: none;
+	}
+
+	&__selected {
+		display: none;
+	}
+
+	.dialog__fileName {
+		display: none;
 	}
 
 	.input {

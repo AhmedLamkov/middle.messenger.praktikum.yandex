@@ -1,10 +1,12 @@
+@use '../../colors';
+
 .chatCard {
 	display: flex;
 	justify-content: space-around;
 	padding: 10px;
 	cursor: pointer;
-	border-top: 1px solid rgba(234, 234, 234, 1);
-	border-bottom: 1px solid rgba(234, 234, 234, 1);
+	border-top: 1px solid colors.$grey;
+	border-bottom: 1px solid colors.$grey;
 
 	&__icon {
 		background: url(../../assets/photo.svg);
@@ -32,17 +34,17 @@
 	&__description {
 		font-size: 12px;
 		line-height: 15px;
-		color:rgba(153, 153, 153, 1);
+		color: colors.$dark-grey;
 		text-overflow: ellipsis;
 	}
 
 	&__date {
 		font-size: 9px;
 		line-height: 13px;
-		color:rgba(153, 153, 153, 1);
+		color: colors.$dark-grey;
 	}
 
 	&__active {
-		background: rgba(228, 237, 253, 1);
+		background: colors.$light-blue;
 	}
 }

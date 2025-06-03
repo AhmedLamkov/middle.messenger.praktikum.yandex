@@ -1,5 +1,5 @@
-export { Button } from "./button";
-export { Input } from "./input";
-export { Dialog } from "./dialog";
-export { ChatList } from "./chatList";
-export { ChatCard } from "./chatCard";
+export { Button } from './button/index.ts';
+export { Input } from './input/index.ts';
+export { Dialog } from './dialog/index.ts';
+export { ChatList } from './chatList/index.ts';
+export { ChatCard } from './chatCard/index.ts';

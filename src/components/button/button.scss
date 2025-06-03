@@ -1,13 +1,19 @@
+@use '../../colors';
+
 .button {
+	border-radius: 8px;
+  border: 1px solid transparent;
 	padding: 12px 70px;
 	font-size: 13px;
 	line-height: 13px;
-	color: rgba(255, 255, 255, 1);
-	background:rgba(51, 105, 243, 1) ;
+	font-weight: 500;
+	color: colors.$white;
+	background: colors.$blue;
+	cursor: pointer;
 
-	&__link {
+	&.link {
 		border: none;
-		color:rgba(51, 105, 243, 1) ;
+		color: colors.$blue;
 		background: inherit;
 	}
 
@@ -15,9 +21,9 @@
 		outline: none;
 	}
 
-	&__back {
+	&.back {
 		padding: 0;
-		color: rgba(51, 105, 243, 1);
+		color:  colors.$blue;
 		background: inherit;
 		border: none;
 	}
