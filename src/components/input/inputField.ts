@@ -20,6 +20,7 @@ export default class InputField extends Block {
       Input: new Input({
         className: 'input__element',
         events: { ...events },
+        placeholder: '',
         ...elementProps,
       }),
     });

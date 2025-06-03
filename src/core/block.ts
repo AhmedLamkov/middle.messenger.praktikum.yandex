@@ -171,7 +171,7 @@ export default class Block<T extends HTMLElement = any> {
 
     this.elementProps && Object.keys(this.elementProps).forEach((key) => {
       const prop = this.elementProps[key as keyof HTMLElement];
-      prop && element?.setAttribute(key, prop.toString());
+      prop != null && element?.setAttribute(key, prop.toString());
     });
 
     Object.values(this.children).forEach((child) => {
@@ -228,12 +228,11 @@ export default class Block<T extends HTMLElement = any> {
       },
       set(target, prop, value) {
         const oldTarget = { ...target };
-        const newTarget = { ...target };
-        newTarget[prop] = value;
+        target[prop] = value;
 
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
-        emitBind(Block.EVENTS.FLOW_CDU, oldTarget, newTarget);
+        emitBind(Block.EVENTS.FLOW_CDU, oldTarget, target);
         return true;
       },
       deleteProperty() {

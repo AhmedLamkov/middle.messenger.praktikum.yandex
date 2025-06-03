@@ -52,6 +52,7 @@
 	}
 }
 
+.input__element:not(:placeholder-shown) + .input__label,
 .input__element:focus + .input__label {
   transform: translateY(-36px);
 }
