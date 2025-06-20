@@ -7,8 +7,9 @@ interface InputProps extends Partial<HTMLInputElement> {
 
 export default class Input extends Block {
   constructor({ events, className, ...elementProps }: InputProps) {
-    super('input', {
+    super({
       events,
+      tagName: 'input',
       className,
       elementProps,
     });

@@ -1,12 +1,18 @@
-import { Button, Input } from '../../components/index.ts';
+import { BackButton, Button, Input } from '../../components/index.ts';
 import Block from '../../core/block.ts';
 import type { Props } from '../../core/types';
 import avatar from '../../assets/avatar.svg';
+import { ROUTER } from '../../constants.ts';
+import { withRouter } from '../../utils/withRouter.ts';
 
-export default class EditProfilePage extends Block {
-  constructor(props: Props | undefined) {
-    super('main', {
+class ResetPasswordPage extends Block {
+  constructor(props: Props) {
+    super({
       ...props,
+      tagName: 'main',
+      BackButton: new BackButton({
+        onClick: () => props.router.go(ROUTER.profile),
+      }),
       oldPassword: new Input({
         placeholder: '•••••••••',
         className: 'edit',
@@ -102,9 +108,9 @@ export default class EditProfilePage extends Block {
         </form>
       </div>
       {{{ SaveButton }}}
-      <div class="editProfile__back">
-        <div class="profile__icon"></div>
-      </div>
+      {{{ BackButton }}}
     `;
   }
 }
+
+export default withRouter(ResetPasswordPage);

@@ -8,8 +8,9 @@ export interface ChatProps {
 
 export default class ChatCard extends Block {
   constructor(props: ChatProps) {
-    super('li', {
+    super({
       ...props,
+      tagName: 'li',
       className: 'chatCard',
     });
   }

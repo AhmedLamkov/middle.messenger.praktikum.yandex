@@ -3,8 +3,9 @@ import type { Props } from '../../core/types';
 
 export default class NavigatePage extends Block {
   constructor(props: Props | undefined) {
-    super('nav', {
+    super({
       ...props,
+      tagName: 'nav',
     });
   }
 

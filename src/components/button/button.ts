@@ -11,8 +11,9 @@ export default class Button extends Block {
   constructor({
     className, type, events, label, ...elementProps
   }: ButtonProps) {
-    super('button', {
+    super({
       elementProps,
+      tagName: 'button',
       label,
       type,
       className: `button ${className}`,

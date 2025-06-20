@@ -4,8 +4,9 @@ import type { Props } from '../../core/types';
 
 export default class LoginPage extends Block {
   constructor(props: Props | undefined) {
-    super('div', {
+    super({
       ...props,
+      tagName: 'main',
       formState: {
         login: '',
         password: '',

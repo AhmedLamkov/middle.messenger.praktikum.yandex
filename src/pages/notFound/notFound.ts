@@ -4,8 +4,9 @@ import type { Props } from '../../core/types';
 
 export default class NotFoundPage extends Block {
   constructor(props: Props | undefined) {
-    super('main', {
+    super({
       ...props,
+      tagName: 'main',
       className: 'notFound',
       backButton: new Button({
         label: 'Назад к чатам',

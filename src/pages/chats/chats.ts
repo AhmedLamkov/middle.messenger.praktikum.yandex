@@ -5,8 +5,9 @@ import type { Props } from '../../core/types';
 
 export default class ChatsPage extends Block {
   constructor(props: Props | undefined) {
-    super('main', {
+    super({
       ...props,
+      tagName: 'main',
       className: 'chats',
       ChatList: new ChatList({ chatUsers }),
       search: new Input({

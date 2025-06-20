@@ -4,8 +4,9 @@ import type { Props } from '../../core/types';
 
 export default class ErrorPage extends Block {
   constructor(props: Props | undefined) {
-    super('main', {
+    super({
       ...props,
+      tagName: 'main',
       className: 'error',
       backButton: new Button({
         label: 'Назад к чатам',

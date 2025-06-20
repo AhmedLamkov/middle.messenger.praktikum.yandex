@@ -1,13 +1,19 @@
 import Block from '../../core/block.ts';
 import type { PropsDialog } from '../../core/types';
-import { Dialog } from '../../components/index.ts';
+import { BackButton, Dialog } from '../../components/index.ts';
 import avatar from '../../assets/avatar.svg';
+import { ROUTER } from '../../constants.ts';
+import { withRouter } from '../../utils/withRouter.ts';
 
-export default class ProfilePage extends Block {
+class ProfilePage extends Block {
   constructor(props: PropsDialog) {
-    super('main', {
+    super({
       ...props,
+      tagName: 'main',
       Dialog: new Dialog({}),
+      BackButton: new BackButton({
+        onClick: () => props.router.go(ROUTER.chats),
+      }),
     });
   }
 
@@ -54,12 +60,12 @@ export default class ProfilePage extends Block {
           </nav>
       </div>
     </div>
-    <div class="profile__back">
-      <div class="profile__icon"></div>
-    </div>
+    {{{ BackButton }}}
     {{#if showDialog}}
       {{{ Dialog }}}
     {{/if}}
     `;
   }
 }
+
+export default withRouter(ProfilePage);

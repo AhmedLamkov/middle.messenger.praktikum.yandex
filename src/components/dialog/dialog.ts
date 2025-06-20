@@ -5,8 +5,9 @@ import Input from '../input/inputField.ts';
 
 export default class Dialog extends Block {
   constructor(props: Props | undefined) {
-    super('div', {
+    super({
       ...props,
+      tagName: 'div',
       avatar: new Input({
         type: 'file',
         name: 'avatar',

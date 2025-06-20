@@ -1,13 +1,21 @@
-import { Button, Input, Dialog } from '../../components/index.ts';
+import {
+  Button, Input, Dialog, BackButton,
+} from '../../components/index.ts';
 import Block from '../../core/block.ts';
 import type { PropsDialog } from '../../core/types';
 import avatar from '../../assets/avatar.svg';
+import { ROUTER } from '../../constants.ts';
+import { withRouter } from '../../utils/withRouter.ts';
 
-export default class EditProfilePage extends Block {
+class EditProfilePage extends Block {
   constructor(props: PropsDialog) {
-    super('main', {
+    super({
       ...props,
+      tagName: 'main',
       Dialog: new Dialog({}),
+      BackButton: new BackButton({
+        onClick: () => props.router.go(ROUTER.profile),
+      }),
       formState: {
         login: '',
         password: '',
@@ -247,12 +255,12 @@ export default class EditProfilePage extends Block {
         </form>
       </div>
       {{{ SaveButton }}}
-      <div class="editProfile__back">
-        <div class="profile__icon"></div>
-      </div>
+      {{{ BackButton }}}
       {{#if showDialog}}
         {{{ Dialog }}}
       {{/if}}
     `;
   }
 }
+
+export default withRouter(EditProfilePage);

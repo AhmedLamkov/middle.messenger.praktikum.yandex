@@ -16,8 +16,9 @@ export default class RegisterPage extends Block {
   };
 
   constructor(props: Props | undefined) {
-    super('main', {
+    super({
       ...props,
+      tagName: 'main',
       className: 'register',
       email: new Input({
         label: 'Почта',

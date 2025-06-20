@@ -3,6 +3,10 @@ import Handlebars from 'handlebars';
 import EventBus from './eventBus.ts';
 import type { BlockMeta, Props } from './types';
 
+export interface PropsWithTagName extends Props {
+  tagName?: string;
+}
+
 // Нельзя создавать экземпляр данного класса
 export default class Block<T extends HTMLElement = any> {
   static EVENTS = {
@@ -34,7 +38,7 @@ export default class Block<T extends HTMLElement = any> {
    *
    * @returns {void}
    */
-  constructor(tagName = 'div', propsWithChildren: Props = {}) {
+  constructor({ tagName = 'div', ...propsWithChildren }: PropsWithTagName = {}) {
     const eventBus = new EventBus();
     this.eventBus = () => eventBus;
 
