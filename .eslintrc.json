@@ -23,7 +23,8 @@
     "no-constructor-return": "off",
     "no-restricted-syntax":"off",
     "no-continue":"off",
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off",
+    "no-console":"off"
   },
   "env": {
     "browser": true,
