@@ -3,11 +3,10 @@ import type { Props } from '../../core/types.ts';
 
 interface DotsProps extends Props {
   events?: Record<string, (e: Event) => void>;
-  props?: Record<string, any>;
 }
 
 export default class Dots extends Block {
-  constructor({ props, events } : DotsProps) {
+  constructor({ events, ...props } : DotsProps) {
     super({
       ...props,
       tagName: 'div',

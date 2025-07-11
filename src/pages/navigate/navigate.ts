@@ -13,14 +13,14 @@ class NavigatePage extends Block {
   public render(): string {
     return `
       <ul>
-        <li><a href="#" page="login">Вход</a></li>
-        <li><a href="#" page="chats">Список чатов</a></li>
-        <li><a href="#" page="register">Регистрация</a></li>
+        <li><a href="#" page="/">Вход</a></li>
+        <li><a href="#" page="messenger">Список чатов</a></li>
+        <li><a href="#" page="sign-up">Регистрация</a></li>
         <li><a href="#" page="profile">Профиль</a></li>
-        <li><a href="#" page="editProfile">Изменить данные</a></li>
+        <li><a href="#" page="settings">Изменить данные</a></li>
         <li><a href="#" page="resetPassword">Изменить пароль</a></li>
-        <li><a href="#" page="error">500</a></li>
-        <li><a href="#" page="notFound">404</a></li>
+        <li><a href="#" page="500">500</a></li>
+        <li><a href="#" page="400">404</a></li>
     </ul>
     `;
   }

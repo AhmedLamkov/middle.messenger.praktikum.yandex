@@ -112,8 +112,8 @@ class ChatsPage extends Block {
   private async addUserToChat(e: SubmitEvent) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const value = Object.fromEntries(formData as any);
-    const users = await UsersService.searchUsers(value.login);
+    const value = Object.fromEntries(formData);
+    const users = await UsersService.searchUsers(value.login as string);
     const user = users.find((user) => user.login === value.login);
     const chatId = this.props.selectedChat;
     user?.id && ChatsService.addUserToChat(chatId, user?.id);
@@ -122,8 +122,8 @@ class ChatsPage extends Block {
   private async DeleteUserFromChat(e: SubmitEvent) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const value = Object.fromEntries(formData as any);
-    const users = await UsersService.searchUsers(value.login);
+    const value = Object.fromEntries(formData);
+    const users = await UsersService.searchUsers(value.login as string);
     const user = users.find((user) => user.login === value.login);
     const chatId = this.props.selectedChat;
     user?.id && ChatsService.deleteUserFromChat(chatId, user?.id);
@@ -132,8 +132,8 @@ class ChatsPage extends Block {
   private createChat(e: SubmitEvent) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const value = Object.fromEntries(formData as any);
-    ChatsService.createChat(value.chat_name);
+    const value = Object.fromEntries(formData);
+    ChatsService.createChat(value.chat_name as string);
   }
 
   private openCreateChat() {

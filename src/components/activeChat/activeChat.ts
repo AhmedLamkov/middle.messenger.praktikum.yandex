@@ -63,12 +63,12 @@ class ActiveChat extends Block {
     form?.addEventListener('submit', (e) => {
       e.preventDefault();
       const formData = new FormData(e.target as HTMLFormElement);
-      const values = Object.fromEntries(formData as any);
+      const values = Object.fromEntries(formData);
       const message = this.children.sendMessage as Block;
       const messageElement = message.element?.querySelector('input') as HTMLInputElement;
 
       if (messageElement.value.trim() !== '' && this.props.selectedChat) {
-        MessagesService.sendMessage(this.props.selectedChat, values.message);
+        MessagesService.sendMessage(this.props.selectedChat, values.message as string);
       }
     });
   }

@@ -4,10 +4,6 @@ export interface BlockMeta {
   tagName: string;
   props?: Record<string, any>;
 }
-export interface PropsDialog extends Partial<HTMLElement> {
-  router: any;
-  showDialog?: boolean;
-}
 
 export type Props = Record<string, any>;
 
@@ -24,6 +20,5 @@ export interface State {
   selectedChat?: number;
   onSubmit?: Event;
   messages?: Record<number, messageProps[]>;
-  router?: any;
   showDialog?: boolean;
 }

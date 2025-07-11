@@ -1,6 +1,6 @@
 import UsersApi from '../api/usersApi.ts';
 import type { ChangePasswordData, ChangeProfileData } from '../api/type';
-import { ROUTER } from '../constants.ts';
+import { Routes } from '../main.ts';
 
 class UsersService {
   async changeProfileData(data: ChangeProfileData) {
@@ -9,7 +9,7 @@ class UsersService {
       window.store.set({ user });
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
   }
 
@@ -19,17 +19,17 @@ class UsersService {
       window.store.set({ user });
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
   }
 
   async changePassword(data: ChangePasswordData) {
     try {
       await UsersApi.changePassword(data);
-      window.router.go(ROUTER.profile);
+      window.router.go(Routes.Profile);
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
   }
 
@@ -38,7 +38,7 @@ class UsersService {
       return await UsersApi.searchUsers(login);
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
 
     return [];

@@ -8,7 +8,7 @@ const METHOD = {
 
 type Options = {
   method: keyof typeof METHOD;
-  data?: any;
+  data?: Record<string, any>;
 };
 
 type OptionsWithoutMethod = Omit<Options, 'method'>;

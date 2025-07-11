@@ -2,10 +2,10 @@ import { BackButton, Button, Input } from '../../components/index.ts';
 import Block from '../../core/block.ts';
 import type { Props } from '../../core/types';
 import avatar from '../../assets/avatar.svg';
-import { ROUTER } from '../../constants.ts';
 import { withRouter } from '../../utils/withRouter.ts';
 import UsersService from '../../services/UsersService.ts';
 import withStore from '../../utils/withStore.ts';
+import { Routes } from '../../main.ts';
 
 class ResetPasswordPage extends Block {
   constructor(props: Props) {
@@ -13,7 +13,7 @@ class ResetPasswordPage extends Block {
       ...props,
       tagName: 'main',
       BackButton: new BackButton({
-        onClick: () => props.router.go(ROUTER.profile),
+        onClick: () => window.router.go(Routes.Profile),
       }),
       oldPassword: new Input({
         value: props.user && props.user.password,

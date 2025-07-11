@@ -1,5 +1,5 @@
 import ChatsApi from '../api/chatsApi.ts';
-import { ROUTER } from '../constants.ts';
+import { Routes } from '../main.ts';
 import MessagesService from './MessagesService.ts';
 
 export class ChatsService {
@@ -10,7 +10,7 @@ export class ChatsService {
       this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
   }
 
@@ -37,7 +37,7 @@ export class ChatsService {
       await this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
   }
 
@@ -48,7 +48,7 @@ export class ChatsService {
       this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
   }
 
@@ -58,7 +58,7 @@ export class ChatsService {
       await this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
 
     return null;
@@ -69,7 +69,7 @@ export class ChatsService {
       return ChatsApi.getChatToken(id);
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
 
     return null;
@@ -84,7 +84,7 @@ export class ChatsService {
       return ChatsApi.getUsers(id);
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
 
     return null;
@@ -96,7 +96,7 @@ export class ChatsService {
       await this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(ROUTER.error);
+      window.router.go(Routes.ServerError);
     }
   }
 }

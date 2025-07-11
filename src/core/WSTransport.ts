@@ -1,5 +1,5 @@
 import EventBus from './eventBus.ts';
-import { ROUTER } from '../constants.ts';
+import { Routes } from '../main.ts';
 
 export const WSTransportEvents = {
   Connected: 'connected',
@@ -79,7 +79,7 @@ export default class WSTransport extends EventBus<string> {
         this.emit(WSTransportEvents.Message, data);
       } catch (err: any) {
         console.error(err.message);
-        window.router.go(ROUTER.error);
+        window.router.go(Routes.ServerError);
       }
     });
   }

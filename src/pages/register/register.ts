@@ -1,7 +1,7 @@
 import { Button, Input } from '../../components/index.ts';
-import { ROUTER } from '../../constants.ts';
 import Block from '../../core/block.ts';
 import type { Props } from '../../core/types.ts';
+import { Routes } from '../../main.ts';
 import AuthService from '../../services/AuthService.ts';
 import { withRouter } from '../../utils/withRouter.ts';
 
@@ -87,7 +87,7 @@ class RegisterPage extends Block {
         label: 'Войти',
         className: 'link',
         events: {
-          click: () => props?.router.go(ROUTER.login),
+          click: () => props?.router.go(Routes.Signup),
         },
       }),
     });

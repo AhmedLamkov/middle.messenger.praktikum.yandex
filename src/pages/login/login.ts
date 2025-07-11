@@ -1,7 +1,7 @@
 import { Button, Input } from '../../components/index.ts';
-import { ROUTER } from '../../constants.ts';
 import Block from '../../core/block.ts';
 import type { Props } from '../../core/types';
+import { Routes } from '../../main.ts';
 import AuthService from '../../services/AuthService.ts';
 import { withRouter } from '../../utils/withRouter.ts';
 
@@ -43,7 +43,7 @@ class LoginPage extends Block {
         events: {
           click: (e) => {
             e.preventDefault();
-            props?.router.go(ROUTER.register);
+            window.router.go(Routes.Signup);
           },
         },
       }),
@@ -109,12 +109,15 @@ class LoginPage extends Block {
     const password = this.children.password as Block;
     const loginElement = login.element?.querySelector('input') as HTMLInputElement;
     const passwordElement = password.element?.querySelector('input') as HTMLInputElement;
-    form?.addEventListener('submit', (e) => {
+
+    form?.addEventListener('submit', async (e) => {
       e.preventDefault();
+
       if (loginElement.value.trim() === '' || passwordElement.value.trim() === '') {
         return;
       }
-      AuthService.loginUser({ login: loginElement.value, password: passwordElement.value });
+      await AuthService.logoutUser();
+      await AuthService.loginUser({ login: loginElement.value, password: passwordElement.value });
     });
   }
 

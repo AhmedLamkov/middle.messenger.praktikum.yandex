@@ -5,7 +5,7 @@ const METHODS = {
   DELETE: 'DELETE',
 };
 
-function queryStringify(data: { [x: string]: any; }) {
+function queryStringify(data: Record<string, any>) {
   if (typeof data !== 'object') {
     throw new Error('Data must be object');
   }
@@ -15,29 +15,29 @@ function queryStringify(data: { [x: string]: any; }) {
 }
 
 interface Options {
-  headers?: any;
-  data?: any;
+  headers?: Record<string, string>,
+  data?: Record<string, any>,
   timeout?: number;
 }
 
 interface RequestOptions extends Options {
-  method: any;
+  method: string;
 }
 
 export class HTTPTransport {
-  get(url: any, options: Options = {}) {
+  get(url: string | URL, options: Options = {}) {
     return this.request(url, { ...options, method: METHODS.GET }, options.timeout);
   }
 
-  post(url: any, options: Options = {}) {
+  post(url: string | URL, options: Options = {}) {
     return this.request(url, { ...options, method: METHODS.POST }, options.timeout);
   }
 
-  put(url: any, options: Options = {}) {
+  put(url: string | URL, options: Options = {}) {
     return this.request(url, { ...options, method: METHODS.PUT }, options.timeout);
   }
 
-  delete(url: any, options: Options = {}) {
+  delete(url: string | URL, options: Options = {}) {
     return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout);
   }
 
@@ -76,7 +76,7 @@ export class HTTPTransport {
       if (isGet || !data) {
         xhr.send();
       } else {
-        xhr.send(data);
+        xhr.send(JSON.stringify(data));
       }
     });
   }

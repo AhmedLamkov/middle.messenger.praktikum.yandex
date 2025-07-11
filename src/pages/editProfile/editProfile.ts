@@ -5,18 +5,18 @@ import {
 } from '../../components/index.ts';
 import Block from '../../core/block.ts';
 import type { Props, State } from '../../core/types';
-import { ROUTER } from '../../constants.ts';
 import { withRouter } from '../../utils/withRouter.ts';
 import withStore from '../../utils/withStore.ts';
 import AuthService from '../../services/AuthService.ts';
 import UsersService from '../../services/UsersService.ts';
+import { Routes } from '../../main.ts';
 
 class EditProfilePage extends Block {
   constructor(props: State) {
     super({
       ...props,
       tagName: 'main',
-      changeAvatar: new ChangeAvatar({
+      ChangeAvatar: new ChangeAvatar({
         src: props.user?.avatar,
         events: {
           click: () => this.openModal(),
@@ -31,6 +31,9 @@ class EditProfilePage extends Block {
         title: 'Добавить пользователя',
         buttonProps: {
           label: 'Загрузите файл',
+          events: {
+            click: () => this.closeModal(),
+          },
         },
         inputProps: {
           type: 'file',
@@ -44,7 +47,7 @@ class EditProfilePage extends Block {
         },
       }),
       BackButton: new BackButton({
-        onClick: () => props.router.go(ROUTER.profile),
+        onClick: () => window.router.go(Routes.Profile),
       }),
       formState: {
         login: '',
@@ -275,6 +278,8 @@ class EditProfilePage extends Block {
   }
 
   componentDidUpdate(oldProps: Props, newProps: Props) {
+    (this.children.ChangeAvatar as Block).setProps({ src: newProps.user.avatar });
+
     const email = document.querySelector('input[name="email"]') as HTMLInputElement;
     const login = document.querySelector('input[name="login"]') as HTMLInputElement;
     const firstName = document.querySelector('input[name="first_name"]') as HTMLInputElement;
@@ -344,15 +349,15 @@ class EditProfilePage extends Block {
   private handleSubmitAvatar(e: SubmitEvent) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const values = Object.fromEntries(formData as any);
-    UsersService.changeAvatar(values.avatar);
+    const values = Object.fromEntries(formData);
+    UsersService.changeAvatar(values.avatar as File);
   }
 
   public render(): string {
     return `
       <div class="editProfile"> 
         <form class="editProfile__wrapper">
-          {{{ changeAvatar }}}
+          {{{ ChangeAvatar }}}
           <div class="editProfile__item">
             <div class="editProfile__label">Почта</div>
             {{{ email }}}

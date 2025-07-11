@@ -1,17 +1,17 @@
 import Block from '../../core/block.ts';
-import type { State } from '../../core/types';
+import type { Props, State } from '../../core/types';
 import { BackButton, Button, ChangeAvatar } from '../../components/index.ts';
-import { ROUTER } from '../../constants.ts';
 import { withRouter } from '../../utils/withRouter.ts';
 import withStore from '../../utils/withStore.ts';
 import AuthService from '../../services/AuthService.ts';
+import { Routes } from '../../main.ts';
 
 class ProfilePage extends Block {
   constructor(props: State) {
     super({
       ...props,
       tagName: 'main',
-      changeAvatar: new ChangeAvatar({
+      ChangeAvatar: new ChangeAvatar({
         src: props.user?.avatar,
       }),
       exitButton: new Button({
@@ -22,9 +22,15 @@ class ProfilePage extends Block {
         },
       }),
       BackButton: new BackButton({
-        onClick: () => props.router.go(ROUTER.chats),
+        onClick: () => window.router.go(Routes.Messenger),
       }),
     });
+  }
+
+  componentDidUpdate(oldProps: Props, newProps: Props) {
+    (this.children.ChangeAvatar as Block).setProps({ src: newProps.user.avatar });
+
+    return super.componentDidUpdate(oldProps, newProps);
   }
 
   private Logout() {
@@ -35,7 +41,7 @@ class ProfilePage extends Block {
     return `
       <div class="profile">
         <div class="profile__wrapper">
-          {{{ changeAvatar }}}
+          {{{ ChangeAvatar }}}
           <h1 class="profile__title">${this.props.user?.first_name || ''}</h1>
           <div class="profile__item">
             <div class="profile__label">Почта</div>
@@ -63,7 +69,7 @@ class ProfilePage extends Block {
           </div>
           <nav class="profile__actions">
             <div class="profile__item">
-              <a href="#" class="profile__edit" page="editProfile">Изменить данные</a>
+              <a href="#" class="profile__edit" page="settings">Изменить данные</a>
             </div>
             <div class="profile__item">
               <a href="#" class="profile__edit" page="resetPassword">Изменить пароль</a>

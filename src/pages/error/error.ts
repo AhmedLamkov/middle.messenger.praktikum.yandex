@@ -2,7 +2,7 @@ import Block from '../../core/block.ts';
 import { Button } from '../../components/index.ts';
 import type { Props } from '../../core/types';
 import { withRouter } from '../../utils/withRouter.ts';
-import { ROUTER } from '../../constants.ts';
+import { Routes } from '../../main.ts';
 
 class ErrorPage extends Block {
   constructor(props: Props | undefined) {
@@ -15,7 +15,7 @@ class ErrorPage extends Block {
         className: 'back',
         events: {
           click: () => {
-            props?.router.go(ROUTER.chats);
+            props?.router.go(Routes.Messenger);
           },
         },
       }),

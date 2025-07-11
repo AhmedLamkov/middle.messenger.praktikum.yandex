@@ -1,6 +1,6 @@
-import { ROUTER } from '../constants.ts';
 import AuthApi from '../api/authApi.ts';
 import type { CreateUser, LoginRequestData } from '../api/type.ts';
+import { Routes } from '../main.ts';
 
 class AuthService {
   async fetchUser() {
@@ -17,7 +17,7 @@ class AuthService {
     try {
       await AuthApi.login(data);
       await this.fetchUser();
-      window.router.go(ROUTER.chats);
+      window.router.go(Routes.Messenger);
     } catch (responsError: any) {
       const error = await responsError.json();
       window.store.set({ loginError: error.reason });
@@ -28,7 +28,7 @@ class AuthService {
     try {
       await AuthApi.create(data);
       await this.fetchUser();
-      window.router.go(ROUTER.chats);
+      window.router.go(Routes.Messenger);
     } catch (responsError:any) {
       const error = await responsError.json();
       window.store.set({ loginError: error.reason });
@@ -38,7 +38,8 @@ class AuthService {
   async logoutUser() {
     try {
       await AuthApi.logout();
-      window.router.go(ROUTER.navigate);
+      window.router.go(Routes.Navigate);
+      console.log('test');
     } catch (responsError:any) {
       const error = await responsError.json();
       window.store.set({ loginError: error.reason });
