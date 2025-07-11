@@ -1,53 +1,65 @@
 import Block from '../../core/block.ts';
-import type { PropsDialog } from '../../core/types';
-import { BackButton, Dialog } from '../../components/index.ts';
-import avatar from '../../assets/avatar.svg';
+import type { State } from '../../core/types';
+import { BackButton, Button, ChangeAvatar } from '../../components/index.ts';
 import { ROUTER } from '../../constants.ts';
 import { withRouter } from '../../utils/withRouter.ts';
+import withStore from '../../utils/withStore.ts';
+import AuthService from '../../services/AuthService.ts';
 
 class ProfilePage extends Block {
-  constructor(props: PropsDialog) {
+  constructor(props: State) {
     super({
       ...props,
       tagName: 'main',
-      Dialog: new Dialog({}),
+      changeAvatar: new ChangeAvatar({
+        src: props.user?.avatar,
+      }),
+      exitButton: new Button({
+        className: 'exit',
+        label: 'Выйти',
+        events: {
+          click: () => this.Logout(),
+        },
+      }),
       BackButton: new BackButton({
         onClick: () => props.router.go(ROUTER.chats),
       }),
     });
   }
 
+  private Logout() {
+    AuthService.logoutUser();
+  }
+
   public render(): string {
     return `
       <div class="profile">
         <div class="profile__wrapper">
-          <div class="profile__background" data-open-dialog>
-            <img class="profile__image" id="image" src="${avatar}" alt="Здесь должен быть ваш аватар">
-          </div>
-          <h1 class="profile__title">Иван</h1>
+          {{{ changeAvatar }}}
+          <h1 class="profile__title">${this.props.user?.first_name || ''}</h1>
           <div class="profile__item">
             <div class="profile__label">Почта</div>
-            <div class="profile__text">pochta@yandex.ru</div>
+            <div class="profile__text">${this.props.user?.email || ''}</div>
           </div>
           <div class="profile__item">
             <div class="profile__label">Логин</div>
-            <div class="profile__text">ivanivanov</div>
+            <div class="profile__text">${this.props.user?.login || ''}</div>
           </div>
           <div class="profile__item">
             <div class="profile__label">Имя</div>
-            <div class="profile__text">Иван</div>
+            <div class="profile__text">${this.props.user?.first_name || ''}</div>
           </div>
           <div class="profile__item">
             <div class="profile__label">Фамилия</div>
-            <div class="profile__text">Иванов</div>
+            <div class="profile__text">${this.props.user?.second_name || ''}</div>
           </div>
           <div class="profile__item">
             <div class="profile__label">Имя в чате</div>
-            <div class="profile__text">Иван</div>
+            <div class="profile__text">${this.props.user?.display_name || ''}</div>
           </div>
           <div class="profile__item">
             <div class="profile__label">Телефон</div>
-            <div class="profile__text">+7 (909) 967 30 30</div>
+            <div class="profile__text">${this.props.user?.phone || ''}</div>
           </div>
           <nav class="profile__actions">
             <div class="profile__item">
@@ -56,16 +68,13 @@ class ProfilePage extends Block {
             <div class="profile__item">
               <a href="#" class="profile__edit" page="resetPassword">Изменить пароль</a>
             </div>
-            <div class="profile__exit">Выйти</div>
+            {{{ exitButton }}}
           </nav>
       </div>
     </div>
     {{{ BackButton }}}
-    {{#if showDialog}}
-      {{{ Dialog }}}
-    {{/if}}
     `;
   }
 }
-
-export default withRouter(ProfilePage);
+const userStore = withStore((state) => ({ user: state.user }));
+export default userStore(withRouter(ProfilePage));

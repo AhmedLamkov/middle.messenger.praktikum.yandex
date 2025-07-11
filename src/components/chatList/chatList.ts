@@ -8,7 +8,7 @@ export default class ChatList extends Block {
     super({
       ...props,
       tagName: 'ul',
-      chatUsers: props?.chatUsers.map(
+      chatUsers: props?.chats?.map(
         (props: ChatProps) => new ChatCard(props),
       ),
     });

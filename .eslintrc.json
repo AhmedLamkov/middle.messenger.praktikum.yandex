@@ -22,7 +22,8 @@
     "no-param-reassign": "off",
     "no-constructor-return": "off",
     "no-restricted-syntax":"off",
-    "no-continue":"off"
+    "no-continue":"off",
+    "no-nested-ternary": "off"
   },
   "env": {
     "browser": true,

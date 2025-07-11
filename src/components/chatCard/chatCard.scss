@@ -36,6 +36,7 @@
 		line-height: 15px;
 		color: colors.$dark-grey;
 		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 
 	&__date {

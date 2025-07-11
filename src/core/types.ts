@@ -1,4 +1,4 @@
-import type { APIError, UserDTO } from '../api/type';
+import type { ChatInfo, UserDTO, messageProps } from '../api/type';
 
 export interface BlockMeta {
   tagName: string;
@@ -18,7 +18,12 @@ export interface RouteInterface {
 }
 
 export interface State {
-  isLoading?: boolean;
-  user?: UserDTO | APIError;
+  user?: UserDTO;
   loginError?: string;
+  chats?: ChatInfo[];
+  selectedChat?: number;
+  onSubmit?: Event;
+  messages?: Record<number, messageProps[]>;
+  router?: any;
+  showDialog?: boolean;
 }

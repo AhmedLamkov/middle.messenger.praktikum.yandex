@@ -1,10 +1,8 @@
 import Block from '../../core/block.ts';
 
-interface ButtonProps extends Partial<Button> {
-  type?: string;
-  label: string;
+interface ButtonProps extends Partial<HTMLButtonElement> {
+  label?: string;
   events?: Record<string, (e: Event) => void>;
-  className?: string;
 }
 
 export default class Button extends Block {

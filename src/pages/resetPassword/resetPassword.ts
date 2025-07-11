@@ -4,6 +4,8 @@ import type { Props } from '../../core/types';
 import avatar from '../../assets/avatar.svg';
 import { ROUTER } from '../../constants.ts';
 import { withRouter } from '../../utils/withRouter.ts';
+import UsersService from '../../services/UsersService.ts';
+import withStore from '../../utils/withStore.ts';
 
 class ResetPasswordPage extends Block {
   constructor(props: Props) {
@@ -14,6 +16,7 @@ class ResetPasswordPage extends Block {
         onClick: () => props.router.go(ROUTER.profile),
       }),
       oldPassword: new Input({
+        value: props.user && props.user.password,
         placeholder: '•••••••••',
         className: 'edit',
         type: 'password',
@@ -86,11 +89,43 @@ class ResetPasswordPage extends Block {
     }
   }
 
+  componentDidMount(): void {
+    this.handleSubmit();
+  }
+
+  private handleSubmit() {
+    const resetPassword = document.querySelector('.resetPassword__wrapper');
+    const oldPassword = this.children.oldPassword as Block;
+    const newPassword = this.children.newPassword as Block;
+    const confirmNewPassword = this.children.confirmNewPassword as Block;
+
+    const oldPasswordElement = oldPassword.element?.querySelector('input') as HTMLInputElement;
+    const newPasswordElement = newPassword.element?.querySelector('input') as HTMLInputElement;
+    const confirmNewPasswordElement =
+      confirmNewPassword.element?.querySelector('input') as HTMLInputElement;
+    resetPassword?.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (oldPassword.props.error || confirmNewPassword.props.error || newPassword.props.error) {
+        return;
+      }
+
+      if (oldPasswordElement.value.trim() === '' || confirmNewPasswordElement.value.trim() === '' || newPasswordElement.value.trim() === '') {
+        return;
+      }
+
+      UsersService.changePassword({
+        oldPassword: oldPasswordElement.value,
+        newPassword: newPasswordElement.value,
+      });
+    });
+  }
+
   public render(): string {
     return `
       <div class="resetPassword">
         <form class="resetPassword__wrapper">
-          <div class="resetPassword__background data-open-dialog">
+          <div class="resetPassword__background">
             <img class="resetPassword__image" src="${avatar}" alt="Здесь должен быть ваш аватар">
           </div>
           <div class="resetPassword__item">
@@ -105,12 +140,12 @@ class ResetPasswordPage extends Block {
             <div class="resetPassword__label">Повторите новый пароль</div>
             {{{ confirmNewPassword }}}
           </div>
+          {{{ SaveButton }}}
         </form>
       </div>
-      {{{ SaveButton }}}
       {{{ BackButton }}}
     `;
   }
 }
-
-export default withRouter(ResetPasswordPage);
+const userStore = withStore((state) => ({ user: state.user }));
+export default userStore(withRouter(ResetPasswordPage));

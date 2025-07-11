@@ -1,8 +1,11 @@
 import { Button, Input } from '../../components/index.ts';
+import { ROUTER } from '../../constants.ts';
 import Block from '../../core/block.ts';
 import type { Props } from '../../core/types.ts';
+import AuthService from '../../services/AuthService.ts';
+import { withRouter } from '../../utils/withRouter.ts';
 
-export default class RegisterPage extends Block {
+class RegisterPage extends Block {
   formState = {
     login: '',
     password: '',
@@ -83,9 +86,14 @@ export default class RegisterPage extends Block {
       SignInButton: new Button({
         label: 'Войти',
         className: 'link',
+        events: {
+          click: () => props?.router.go(ROUTER.login),
+        },
       }),
     });
+  }
 
+  componentDidMount(): void {
     this.handleSubmit();
   }
 
@@ -240,49 +248,56 @@ export default class RegisterPage extends Block {
   }
 
   private handleSubmit() {
-    // const form = document.querySelector('.register__form');
-    // const login = this.children.login as Block;
-    // const password = this.children.password as Block;
-    // const confirmPassword = this.children.confirm_password as Block;
-    // const email = this.children.email as Block;
-    // const firstName = this.children.first_name as Block;
-    // const secondName = this.children.second_name as Block;
-    // const phone = this.children.phone as Block;
+    const form = document.querySelector('.register__form');
+    const login = this.children.login as Block;
+    const password = this.children.password as Block;
+    const confirmPassword = this.children.confirm_password as Block;
+    const email = this.children.email as Block;
+    const firstName = this.children.first_name as Block;
+    const secondName = this.children.second_name as Block;
+    const phone = this.children.phone as Block;
 
-    // const loginElement = login.element?.querySelector('input') as HTMLInputElement;
-    // const passwordElement = password.element?.querySelector('input') as HTMLInputElement;
-    // const emailElement = email.element?.querySelector('input') as HTMLInputElement;
-    // const confirmPasswordElement =
-    //   confirmPassword.element?.querySelector('input') as HTMLInputElement;
-    // const firstNameElement = firstName.element?.querySelector('input') as HTMLInputElement;
-    // const secondNameElement = secondName.element?.querySelector('input') as HTMLInputElement;
-    // const phoneElement = phone.element?.querySelector('input') as HTMLInputElement;
+    const loginElement = login.element?.querySelector('input') as HTMLInputElement;
+    const passwordElement = password.element?.querySelector('input') as HTMLInputElement;
+    const emailElement = email.element?.querySelector('input') as HTMLInputElement;
+    const confirmPasswordElement =
+      confirmPassword.element?.querySelector('input') as HTMLInputElement;
+    const firstNameElement = firstName.element?.querySelector('input') as HTMLInputElement;
+    const secondNameElement = secondName.element?.querySelector('input') as HTMLInputElement;
+    const phoneElement = phone.element?.querySelector('input') as HTMLInputElement;
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-    // form?.addEventListener('submit', (e) => {
-    //   e.preventDefault();
+      if (login.props.error ||
+        password.props.error ||
+        confirmPassword.props.error ||
+        email.props.error ||
+        firstName.props.error ||
+        secondName.props.error ||
+        phone.props.error
+      ) {
+        return;
+      }
 
-    //   if (login.props.error ||
-    //     password.props.error ||
-    //     confirmPassword.props.error ||
-    //     email.props.error ||
-    //     firstName.props.error ||
-    //     secondName.props.error ||
-    //     phone.props.error
-    //   ) {
-    //     return;
-    //   }
-
-    //   if (loginElement.value.trim() === '' ||
-    //     passwordElement.value.trim() === '' ||
-    //     confirmPasswordElement.value.trim() === '' ||
-    //     emailElement.value.trim() === '' ||
-    //     firstNameElement.value.trim() === '' ||
-    //     secondNameElement.value.trim() === '' ||
-    //     phoneElement.value.trim() === ''
-    //   ) {
-    //     return;
-    //   }
-    // });
+      if (loginElement.value.trim() === '' ||
+        passwordElement.value.trim() === '' ||
+        confirmPasswordElement.value.trim() === '' ||
+        emailElement.value.trim() === '' ||
+        firstNameElement.value.trim() === '' ||
+        secondNameElement.value.trim() === '' ||
+        phoneElement.value.trim() === ''
+      ) {
+        return;
+      }
+      AuthService.registerUser({
+        login: loginElement.value,
+        password: passwordElement.value,
+        first_name: firstNameElement.value,
+        second_name: secondNameElement.value,
+        phone: phoneElement.value,
+        email: emailElement.value,
+      });
+    });
   }
 
   public render(): string {
@@ -306,3 +321,5 @@ export default class RegisterPage extends Block {
     `;
   }
 }
+
+export default withRouter(RegisterPage);

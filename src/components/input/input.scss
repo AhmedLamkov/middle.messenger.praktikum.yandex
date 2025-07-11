@@ -42,13 +42,17 @@
 		height: 20px;
 		position: absolute;
 		left: 34%;
-		top: 8px;
 	}
 
 	&__error {
 		font-size: 8px;
 		line-height: 8px;
 		color: colors.$light-red;
+	}
+
+	&.user {
+		margin-top: 50px;
+		margin-bottom: 33px;
 	}
 }
 
@@ -72,6 +76,15 @@
 		text-underline-offset: 4px;
 		transform: translateY(0);
 		align-items: center;
+	}
+
+	.input__container {
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		height: fit-content;
+		margin-top: 43px;
+		margin-bottom: 45px;
 	}
 }
 

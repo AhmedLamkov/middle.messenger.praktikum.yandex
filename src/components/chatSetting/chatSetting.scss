@@ -1,0 +1,36 @@
+@use '../../colors';
+
+.chatSetting {
+	display: none;
+	width: 100%;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	right: 0;
+
+	&__container {
+		position: absolute;
+		max-width: 255px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		row-gap: 16px;
+		background: colors.$white;
+		box-shadow: 0 0 6px 0 colors.$shadow;
+		border-radius: 12px;
+		padding: 15px;
+		right:0;
+		top: 15%;
+	}
+
+	&__title {
+		font-size: 12px;
+		line-height: 14px;
+		color:colors.$dark;
+	}
+
+	&.open  {
+		display: block;
+	}
+}
+

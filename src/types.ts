@@ -1,4 +1,3 @@
-// import Block from "./core/block";
 import * as Pages from './pages/index.ts';
 
 export interface Events {

@@ -1,0 +1,14 @@
+@use '../../colors';
+
+.homeChat {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&__title {
+		font-size: 12px;
+		line-height: 12px;
+		color: colors.$dark-grey;
+	}
+}

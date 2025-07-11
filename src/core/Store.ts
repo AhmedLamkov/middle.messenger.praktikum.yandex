@@ -1,7 +1,7 @@
 import EventBus from './eventBus.ts';
 import type { State } from './types.ts';
 
-const StoreEvents = {
+export const StoreEvents = {
   Updated: 'UPDATED',
 } as const;
 

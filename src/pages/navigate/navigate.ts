@@ -1,7 +1,8 @@
 import Block from '../../core/block.ts';
 import type { Props } from '../../core/types';
+import { withRouter } from '../../utils/withRouter.ts';
 
-export default class NavigatePage extends Block {
+class NavigatePage extends Block {
   constructor(props: Props | undefined) {
     super({
       ...props,
@@ -24,3 +25,5 @@ export default class NavigatePage extends Block {
     `;
   }
 }
+
+export default withRouter(NavigatePage);
