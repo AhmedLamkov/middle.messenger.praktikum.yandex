@@ -12,7 +12,8 @@ export default class InputField extends Block {
   constructor({
     label, error, events, icon, className, ...elementProps
   }: InputFieldProps) {
-    super('div', {
+    super({
+      tagName: 'div',
       className: `input ${className}`,
       label,
       error,

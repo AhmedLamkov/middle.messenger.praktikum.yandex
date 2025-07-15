@@ -5,9 +5,10 @@ import type { ChatProps } from '../chatCard/chatCard';
 
 export default class ChatList extends Block {
   constructor(props: Props | undefined) {
-    super('ul', {
+    super({
       ...props,
-      chatUsers: props?.chatUsers.map(
+      tagName: 'ul',
+      chatUsers: props?.chats?.map(
         (props: ChatProps) => new ChatCard(props),
       ),
     });

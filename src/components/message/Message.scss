@@ -1,0 +1,70 @@
+@use '../../colors';
+
+.message {
+	display: flex;
+	row-gap: 30px;
+	padding: 48px 0 30px;
+
+	&__container {
+		max-width: 402px;
+		position: relative;
+	}
+
+	&.received {
+		.message__container {
+			border-radius: 0 10px 10px 10px;
+			padding: 11px;
+			background: colors.$grey-message;
+			text-align: left;
+		}
+		.message__read{
+			display: none;
+		}
+	}
+
+	&.sent  {
+		justify-content: flex-end;
+		.message__container {
+			display: flex;
+			justify-content: space-between;
+			column-gap: 15px;
+			padding: 11px;
+			border-radius: 10px 10px 0 10px;
+			background: colors.$light-blue;
+		}
+	}
+
+	&__text {
+		font-size: 12px;
+		line-height: 15px;
+		font-weight: 500;
+		color: colors.$dark;
+		text-align: left;
+		word-break: break-all;
+	}
+
+	&__read {
+		background: url(../../assets/icons/cheked.svg);
+		background-size: contain;
+		background-repeat: no-repeat;
+		width: 10px;
+		height: 6px;
+	}
+
+	&__time {
+		font-size: 9px;
+		line-height: 9px;
+		color: colors.$dark-grey;
+		text-align: right;
+	}
+
+	&__info {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		column-gap: 4px;
+		position: absolute;
+		right: 0;
+		top: 70%;
+	}
+}

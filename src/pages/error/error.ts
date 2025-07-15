@@ -1,15 +1,23 @@
 import Block from '../../core/block.ts';
 import { Button } from '../../components/index.ts';
 import type { Props } from '../../core/types';
+import { withRouter } from '../../utils/withRouter.ts';
+import { Routes } from '../../main.ts';
 
-export default class ErrorPage extends Block {
+class ErrorPage extends Block {
   constructor(props: Props | undefined) {
-    super('main', {
+    super({
       ...props,
+      tagName: 'main',
       className: 'error',
       backButton: new Button({
         label: 'Назад к чатам',
         className: 'back',
+        events: {
+          click: () => {
+            props?.router.go(Routes.Messenger);
+          },
+        },
       }),
     });
   }
@@ -22,3 +30,5 @@ export default class ErrorPage extends Block {
     `;
   }
 }
+
+export default withRouter(ErrorPage);

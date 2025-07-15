@@ -1,15 +1,23 @@
 import Block from '../../core/block.ts';
 import { Button } from '../../components/index.ts';
 import type { Props } from '../../core/types';
+import { withRouter } from '../../utils/withRouter.ts';
+import { Routes } from '../../main.ts';
 
-export default class NotFoundPage extends Block {
+class NotFoundPage extends Block {
   constructor(props: Props | undefined) {
-    super('main', {
+    super({
       ...props,
+      tagName: 'main',
       className: 'notFound',
       backButton: new Button({
         label: 'Назад к чатам',
         className: 'back',
+        events: {
+          click: () => {
+            props?.router.go(Routes.Messenger);
+          },
+        },
       }),
     });
   }
@@ -22,3 +30,5 @@ export default class NotFoundPage extends Block {
     `;
   }
 }
+
+export default withRouter(NotFoundPage);

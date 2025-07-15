@@ -1,14 +1,26 @@
-import { Input, ChatList } from '../../components/index.ts';
-import chatUsers from './chatUsers.ts';
+import {
+  Input, ChatList, ChatSetting,
+  Modal,
+  Button,
+} from '../../components/index.ts';
 import Block from '../../core/block.ts';
 import type { Props } from '../../core/types';
+import ChatsService from '../../services/ChatsService.ts';
+import { withRouter } from '../../utils/withRouter.ts';
+import withStore from '../../utils/withStore.ts';
+import ActiveChat from '../../components/activeChat/activeChat.ts';
+import UsersService from '../../services/UsersService.ts';
+import HomeChat from '../../components/homeChat/homeChat.ts';
 
-export default class ChatsPage extends Block {
+class ChatsPage extends Block {
   constructor(props: Props | undefined) {
-    super('main', {
+    super({
       ...props,
+      tagName: 'main',
       className: 'chats',
-      ChatList: new ChatList({ chatUsers }),
+      ChatList: new ChatList({
+        chats: props?.chats,
+      }),
       search: new Input({
         placeholder: 'Поиск',
         className: 'chats__search',
@@ -16,32 +28,158 @@ export default class ChatsPage extends Block {
         name: 'message',
         icon: true,
       }),
-      message: new Input({
-        placeholder: 'Сообщение',
-        className: 'chats__input',
-        type: 'text',
-        name: 'message',
+      createChatButton: new Button({
+        className: 'chat',
+        label: 'cоздать чат',
         events: {
-          blur: () => this.ValidateMessage(),
+          click: () => this.openCreateChat(),
         },
       }),
-
+      homeChat: new HomeChat({}),
+      ActiveChat: new ActiveChat({
+        openSettings: () => this.openSettings(),
+      }),
+      chatSetting: new ChatSetting({
+        open: false,
+        events: {
+          click: () => this.closeSettings(),
+        },
+        addUser: () => this.openUser('add'),
+        deleteUser: () => this.openUser('delete'),
+      }),
+      createChatModal: new Modal({
+        open: false,
+        events: {
+          click: () => this.closeCreateChat(),
+        },
+        title: 'Создать чат',
+        onSubmit: (e: SubmitEvent) => this.createChat(e),
+        buttonProps: {
+          label: 'Создать',
+          events: {
+            click: () => this.closeCreateChat(),
+          },
+        },
+        inputProps: {
+          label: 'Имя чата',
+          type: 'text',
+          name: 'chat_name',
+        },
+      }),
+      addUserModal: new Modal({
+        open: false,
+        events: {
+          click: () => this.closeUser('add'),
+        },
+        title: 'Добавить пользователя',
+        buttonProps: {
+          label: 'Добавить',
+          events: {
+            click: () => this.closeUser('add'),
+          },
+        },
+        onSubmit: (e: SubmitEvent) => this.addUserToChat(e),
+        inputProps: {
+          className: 'user',
+          label: 'Логин',
+          type: 'text',
+          name: 'login',
+        },
+      }),
+      deleteUserModal: new Modal({
+        open: false,
+        events: {
+          click: () => this.closeUser('delete'),
+        },
+        title: 'Удалить пользователя',
+        buttonProps: {
+          label: 'Удалить',
+          events: {
+            click: () => this.closeUser('delete'),
+          },
+        },
+        onSubmit: (e: SubmitEvent) => this.DeleteUserFromChat(e),
+        inputProps: {
+          className: 'user',
+          label: 'Логин',
+          type: 'text',
+          name: 'login',
+        },
+      }),
     });
   }
 
-  private ValidateMessage() {
-    const message = this.children.message as Block;
-    const messageElement = message.element?.querySelector('input') as HTMLInputElement;
+  private async addUserToChat(e: SubmitEvent) {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const value = Object.fromEntries(formData);
+    const users = await UsersService.searchUsers(value.login as string);
+    const user = users.find((user) => user.login === value.login);
+    const chatId = this.props.selectedChat;
+    user?.id && ChatsService.addUserToChat(chatId, user?.id);
+  }
 
-    let error = '';
-    if (messageElement.value.trim() === '') {
-      error = 'Сообщение не должно быть пустым';
+  private async DeleteUserFromChat(e: SubmitEvent) {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const value = Object.fromEntries(formData);
+    const users = await UsersService.searchUsers(value.login as string);
+    const user = users.find((user) => user.login === value.login);
+    const chatId = this.props.selectedChat;
+    user?.id && ChatsService.deleteUserFromChat(chatId, user?.id);
+  }
+
+  private createChat(e: SubmitEvent) {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const value = Object.fromEntries(formData);
+    ChatsService.createChat(value.chat_name as string);
+  }
+
+  private openCreateChat() {
+    (this.children.createChatModal as Block).setProps({ open: true });
+  }
+
+  private closeCreateChat() {
+    (this.children.createChatModal as Block).setProps({ open: false });
+  }
+
+  private openSettings() {
+    (this.children.chatSetting as Block).setProps({ open: true });
+  }
+
+  private closeSettings() {
+    (this.children.chatSetting as Block).setProps({ open: false });
+  }
+
+  private openUser(action: 'add' | 'delete') {
+    this.closeSettings();
+    if (action === 'add') {
+      (this.children.addUserModal as Block).setProps({ open: true });
     }
-    if (Array.isArray(message)) {
-      message.forEach((child) => child.setProps({ error }));
-    } else {
-      message.setProps({ error });
+    if (action === 'delete') {
+      (this.children.deleteUserModal as Block).setProps({ open: true });
     }
+  }
+
+  private closeUser(action: 'add' | 'delete') {
+    if (action === 'add') {
+      (this.children.addUserModal as Block).setProps({ open: false });
+    }
+    if (action === 'delete') {
+      (this.children.deleteUserModal as Block).setProps({ open: false });
+    }
+  }
+
+  init(): void {
+    ChatsService.fetchChats();
+    super.init();
+  }
+
+  componentDidUpdate(oldProps: Props, newProps: Props) {
+    this.children.ChatList = new ChatList({ chats: newProps?.chats });
+
+    return super.componentDidUpdate(oldProps, newProps);
   }
 
   public render(): string {
@@ -55,53 +193,25 @@ export default class ChatsPage extends Block {
         </nav>
           {{{ search }}}
           <div class="chats__iconSearch"></div>
+          {{{ createChatButton }}}
           {{{ ChatList }}}
       </div>
-      <div class="chats__dialog">
-        <div class="chats__detail">
-          <div class="chats__title">
-            <div class="chats__icon"></div>
-            <div class="chats__name">Вадим</div>
-          </div> 
-          <div class="chats__dots"></div>
-        </div> 
-        <div class="chats__wrapper">
-          <div class="chats__date">19 июня</div>
-          <div class="chats__message-in">
-            <div class="chats__container">
-              <div class="chats__receive">
-                <span class="chats__text">
-                  Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент
-                  попросила Хассельблад адаптировать модель SWC для полетов на Луну.
-                  Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих
-                  камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.
-                  Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали.
-                  Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.
-                </span>
-                <div class="chats__time">11:56</div>
-              </div>
-            </div>
-          </div>
-          <div class="chats__message-out">
-            <div class="chats__container">
-              <div class="chats__answer">
-                <span class="chats__text">Круто!</span>
-                <div class="chats__info">
-                  <div class="chats__cheked"></div>
-                  <div class="chats__time">12:00</div>
-                </div>
-              </div>
-            </div>    
-          </div>
-        </div>
-        <div class="chats__sendMessage">
-          <div class="chats__clip"></div>
-          <div class="chats__sendText">
-            {{{ message }}}
-            <div class="chats__arrow"></div>
-          </div>
-        </div>
-      </div>
+      {{#if ${this.props.selectedChat === undefined}}}
+        {{{ homeChat }}}
+        {{else}}
+        {{{ ActiveChat }}}
+      {{/if}}
+      {{{ chatSetting }}}
+      {{{ addUserModal }}}
+      {{{ deleteUserModal }}}
+      {{{ createChatModal }}}
     `;
   }
 }
+const withChats = withStore((state) => ({
+  chats: state.chats,
+  selectedChat: state.selectedChat,
+  user: state.user,
+}));
+
+export default withChats(withRouter(ChatsPage));

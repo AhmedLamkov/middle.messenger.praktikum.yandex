@@ -1,13 +1,54 @@
-import { Button, Input, Dialog } from '../../components/index.ts';
+import {
+  Button, Input, BackButton,
+  Modal,
+  ChangeAvatar,
+} from '../../components/index.ts';
 import Block from '../../core/block.ts';
-import type { PropsDialog } from '../../core/types';
-import avatar from '../../assets/avatar.svg';
+import type { Props, State } from '../../core/types';
+import { withRouter } from '../../utils/withRouter.ts';
+import withStore from '../../utils/withStore.ts';
+import AuthService from '../../services/AuthService.ts';
+import UsersService from '../../services/UsersService.ts';
+import { Routes } from '../../main.ts';
 
-export default class EditProfilePage extends Block {
-  constructor(props: PropsDialog) {
-    super('main', {
+class EditProfilePage extends Block {
+  constructor(props: State) {
+    super({
       ...props,
-      Dialog: new Dialog({}),
+      tagName: 'main',
+      ChangeAvatar: new ChangeAvatar({
+        src: props.user?.avatar,
+        events: {
+          click: () => this.openModal(),
+        },
+      }),
+      modalFile: new Modal({
+        open: false,
+        events: {
+          click: () => this.closeModal(),
+        },
+        onSubmit: (e: SubmitEvent) => this.handleSubmitAvatar(e),
+        title: 'Добавить пользователя',
+        buttonProps: {
+          label: 'Загрузите файл',
+          events: {
+            click: () => this.closeModal(),
+          },
+        },
+        inputProps: {
+          type: 'file',
+          name: 'avatar',
+          label: 'Выбрать файл на компьютере',
+          accept: '.jpg,.jpeg,.png',
+          className: 'file',
+          events: {
+            change: (e: Event) => this.ChangeFile(e),
+          },
+        },
+      }),
+      BackButton: new BackButton({
+        onClick: () => window.router.go(Routes.Profile),
+      }),
       formState: {
         login: '',
         password: '',
@@ -17,7 +58,7 @@ export default class EditProfilePage extends Block {
         password: '',
       },
       email: new Input({
-        placeholder: 'pochta@yandex.ru',
+        value: props.user && props.user.email,
         className: 'edit',
         type: 'email',
         name: 'email',
@@ -26,7 +67,7 @@ export default class EditProfilePage extends Block {
         },
       }),
       login: new Input({
-        placeholder: 'ivanivanov',
+        value: props.user && props.user.login,
         className: 'edit',
         type: 'text',
         name: 'login',
@@ -35,7 +76,7 @@ export default class EditProfilePage extends Block {
         },
       }),
       first_name: new Input({
-        placeholder: 'Иван',
+        value: props.user && props.user.first_name,
         className: 'edit',
         type: 'text',
         name: 'first_name',
@@ -44,7 +85,7 @@ export default class EditProfilePage extends Block {
         },
       }),
       second_name: new Input({
-        placeholder: 'Иванов',
+        value: props.user && props.user.second_name,
         className: 'edit',
         type: 'text',
         name: 'second_name',
@@ -52,8 +93,8 @@ export default class EditProfilePage extends Block {
           blur: (e) => this.ValidateSecondName(e),
         },
       }),
-      chatName: new Input({
-        placeholder: 'Иван',
+      display_name: new Input({
+        value: props.user && props.user.display_name,
         className: 'edit',
         type: 'text',
         name: 'display_name',
@@ -62,7 +103,7 @@ export default class EditProfilePage extends Block {
         },
       }),
       phone: new Input({
-        placeholder: '+7 (909) 967 30 30',
+        value: props.user && props.user.phone,
         className: 'edit',
         type: 'phone',
         name: 'tel',
@@ -74,7 +115,24 @@ export default class EditProfilePage extends Block {
         className: 'save',
         label: 'Сохранить',
       }),
+
     });
+  }
+
+  private openModal() {
+    (this.children.modalFile as Block).setProps({ open: true });
+  }
+
+  private closeModal() {
+    (this.children.modalFile as Block).setProps({ open: false });
+  }
+
+  private ChangeFile(e: Event) {
+    const target = e.currentTarget as HTMLInputElement;
+    const name = target.files?.[0].name;
+
+    (this.children.modalFile as Block).setProps({ title: 'Файл загружен', selected: true });
+    ((this.children.modalFile as Block).children.input as Block).setProps({ label: name });
   }
 
   private ValidateEmail(e: Event) {
@@ -122,7 +180,7 @@ export default class EditProfilePage extends Block {
   private ValidateChatName(e: Event) {
     const target = e.target as HTMLInputElement;
     const value = target.value.trim();
-    const chatName = this.children.chatName as Block;
+    const chatName = this.children.display_name as Block;
 
     let error = '';
 
@@ -210,16 +268,96 @@ export default class EditProfilePage extends Block {
     }
   }
 
+  init(): void {
+    AuthService.fetchUser();
+    super.init();
+  }
+
+  componentDidMount(): void {
+    this.handleSubmit();
+  }
+
+  componentDidUpdate(oldProps: Props, newProps: Props) {
+    (this.children.ChangeAvatar as Block).setProps({ src: newProps.user.avatar });
+
+    const email = document.querySelector('input[name="email"]') as HTMLInputElement;
+    const login = document.querySelector('input[name="login"]') as HTMLInputElement;
+    const firstName = document.querySelector('input[name="first_name"]') as HTMLInputElement;
+    const secondName = document.querySelector('input[name="second_name"]') as HTMLInputElement;
+    const displayName = document.querySelector('input[name="display_name"]') as HTMLInputElement;
+    const phone = document.querySelector('input[name="tel"]') as HTMLInputElement;
+
+    email.value = newProps.user.email;
+    login.value = newProps.user.login;
+    firstName.value = newProps.user.first_name;
+    secondName.value = newProps.user.second_name;
+    displayName.value = newProps.user.display_name;
+    phone.value = newProps.user.phone;
+
+    return super.componentDidUpdate(oldProps, newProps);
+  }
+
+  private handleSubmit() {
+    const form = document.querySelector('.editProfile__wrapper');
+    const email = this.children.email as Block;
+    const login = this.children.login as Block;
+    const firstName = this.children.first_name as Block;
+    const secondName = this.children.second_name as Block;
+    const displayName = this.children.display_name as Block;
+    const phone = this.children.phone as Block;
+
+    const emailElement = email.element?.querySelector('input') as HTMLInputElement;
+    const loginElement = login.element?.querySelector('input') as HTMLInputElement;
+    const firstNameElement = firstName.element?.querySelector('input') as HTMLInputElement;
+    const secondNameElement = secondName.element?.querySelector('input') as HTMLInputElement;
+    const chatNameElement = displayName.element?.querySelector('input') as HTMLInputElement;
+    const phoneElement = phone.element?.querySelector('input') as HTMLInputElement;
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (login.props.error ||
+        email.props.error ||
+        firstName.props.error ||
+        secondName.props.error ||
+        displayName.props.error ||
+        phone.props.error
+      ) {
+        return;
+      }
+
+      if (loginElement.value.trim() === '' ||
+        emailElement.value.trim() === '' ||
+        firstNameElement.value.trim() === '' ||
+        secondNameElement.value.trim() === '' ||
+        chatNameElement.value.trim() === '' ||
+        phoneElement.value.trim() === ''
+      ) {
+        return;
+      }
+      UsersService.changeProfileData({
+        email: emailElement.value,
+        login: loginElement.value,
+        first_name: firstNameElement.value,
+        second_name: secondNameElement.value,
+        display_name: chatNameElement.value,
+        phone: phoneElement.value,
+      });
+    });
+  }
+
+  private handleSubmitAvatar(e: SubmitEvent) {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const values = Object.fromEntries(formData);
+    UsersService.changeAvatar(values.avatar as File);
+  }
+
   public render(): string {
     return `
       <div class="editProfile"> 
         <form class="editProfile__wrapper">
-          <div class="editProfile__background" data-open-dialog>
-            <img class="editProfile__image" id="image" src="${avatar}" alt="Здесь должен быть ваш аватар">
-            <div class="editProfile__shadow">
-              <div class="editProfile__text">Поменять аватар</div>
-            </div>
-          </div>
+          {{{ ChangeAvatar }}}
           <div class="editProfile__item">
             <div class="editProfile__label">Почта</div>
             {{{ email }}}
@@ -238,21 +376,19 @@ export default class EditProfilePage extends Block {
           </div>
           <div class="editProfile__item">
             <div class="editProfile__label">Имя в чате</div>
-            {{{ chatName }}}
+            {{{ display_name }}}
           </div>
           <div class="editProfile__item">
             <div class="editProfile__label">Телефон</div>
             {{{ phone }}}
           </div>
+          {{{ SaveButton }}}
         </form>
       </div>
-      {{{ SaveButton }}}
-      <div class="editProfile__back">
-        <div class="profile__icon"></div>
-      </div>
-      {{#if showDialog}}
-        {{{ Dialog }}}
-      {{/if}}
+      {{{ BackButton }}}
+      {{{ modalFile }}}
     `;
   }
 }
+const userStore = withStore((state) => ({ user: state.user }));
+export default userStore(withRouter(EditProfilePage));

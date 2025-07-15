@@ -1,4 +1,3 @@
-// import Block from "./core/block";
 import * as Pages from './pages/index.ts';
 
 export interface Events {
@@ -8,8 +7,10 @@ export interface Events {
   FLOW_RENDER: string;
 }
 
+export type Block = typeof Pages[keyof typeof Pages];
+
 export interface PageInfo {
-  source: typeof Pages[keyof typeof Pages];
+  source: Block;
   chatUsers?: ChatUser[];
   name?: string;
   avatar?: string;

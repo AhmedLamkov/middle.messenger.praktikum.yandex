@@ -1,0 +1,67 @@
+@use '../../colors';
+
+.modal {
+	display: none;
+	background-color: colors.$modal-shadow;
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	top: 0;
+
+	&__container {
+		background-color: white;
+    border-radius: 12px ;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 340px;
+    padding: 40px 30px;
+
+		&.selected {
+
+			.input__label {
+				width: 100%;
+				margin-top:43px;
+				margin-bottom: 60px;
+				cursor: pointer;
+				font-size: 14px;
+				line-height: 15px;
+				font-weight: 500;
+				color: colors.$file-grey;
+				text-decoration: none;
+			}
+		}
+	}
+
+	&.error {
+		.modal__error {
+			display: block;
+			font-size: 11px;
+			line-height: 11px;
+			color: colors.$red;
+			margin-top: 14px;
+		}
+	}
+
+	&__error {
+		display: none;
+	}
+
+	.input {
+		padding: 0;
+	}
+
+	.input__container {
+		margin-top: 43px;
+		margin-bottom: 60px;
+	}
+
+	&.open {
+		display: block;
+	}
+
+	.button {
+		width: 100%;
+	}
+}

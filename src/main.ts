@@ -3,26 +3,22 @@ import './reset.scss';
 import './style.scss';
 import * as Components from './components/index.ts';
 import * as Pages from './pages/index.ts';
-import renderDOM from './core/renderDom.ts';
-import type { PageInfo } from './types';
 
-const pages: Record<string, PageInfo> = {
-  login: { source: Pages.LoginPage },
-  error: { source: Pages.ErrorPage },
-  editProfile: {
-    source: Pages.EditProfilePage,
-    showDialog: true,
-  },
-  notFound: { source: Pages.NotFoundPage },
-  profile: {
-    source: Pages.ProfilePage,
-    showDialog: true,
-  },
-  register: { source: Pages.RegisterPage },
-  resetPassword: { source: Pages.ResetPasswordPage },
-  chats: { source: Pages.ChatsPage },
-  nav: { source: Pages.NavigatePage },
-};
+import Router from './core/Router.ts';
+import { Store } from './core/Store.ts';
+import AuthService from './services/AuthService.ts';
+
+export const Routes = {
+  Login: '/',
+  Signup: '/sign-up',
+  Profile: '/profile',
+  Settings: '/settings',
+  Messenger: '/messenger',
+  ResetPassword: '/resetPassword',
+  notFound: '/400',
+  ServerError: '/500',
+  Navigate: 'navigate',
+} as const;
 
 Object.entries(Components).forEach(([name, template]) => {
   if (typeof template === 'function') {
@@ -31,55 +27,20 @@ Object.entries(Components).forEach(([name, template]) => {
   Handlebars.registerPartial(name, template);
 });
 
-const setupDialog = () => {
-  const openModal = document.querySelector('[data-open-dialog]');
-  const dialog = document.querySelector('.dialog');
-  const dialogContainer = document.querySelector('.dialog__container');
+window.store = new Store({});
 
-  openModal?.addEventListener('click', () => {
-    dialog?.classList.add('open');
-  });
+const APP_ROOT_ELEMNT = '#app';
+window.router = new Router(APP_ROOT_ELEMNT);
+window.router
+  .use(Routes.Login, Pages.LoginPage)
+  .use(Routes.Messenger, Pages.ChatsPage)
+  .use(Routes.Settings, Pages.EditProfilePage)
+  .use(Routes.ServerError, Pages.ErrorPage)
+  .use(Routes.notFound, Pages.NotFoundPage)
+  .use(Routes.Profile, Pages.ProfilePage)
+  .use(Routes.Signup, Pages.RegisterPage)
+  .use(Routes.ResetPassword, Pages.ResetPasswordPage)
+  .use(Routes.Navigate, Pages.NavigatePage)
+  .start();
 
-  dialog?.addEventListener('click', (event) => {
-    if (!dialogContainer?.contains(event?.target as HTMLElement)) {
-      dialog.classList.remove('open');
-    }
-  });
-
-  document?.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      dialog?.classList.remove('open');
-    }
-  });
-};
-
-const navigate = (page: string) => {
-  const { source: Source, ...context } = pages[page];
-  if (typeof Source === 'function') {
-    renderDOM(new Source(context));
-
-    const dialog = document.querySelector('.dialog');
-    if (dialog) setupDialog();
-    return;
-  }
-
-  const container = document.getElementById('app')!;
-
-  const temlpatingFunction = Handlebars.compile(Source);
-  container.innerHTML = temlpatingFunction(context);
-
-  const dialog = document.querySelector('.dialog');
-  if (dialog) setupDialog();
-};
-
-document.addEventListener('DOMContentLoaded', () => navigate('nav'));
-
-document.addEventListener('click', (e) => {
-  const page = (e.target as HTMLElement).getAttribute('page');
-  if (page) {
-    navigate(page);
-
-    e.preventDefault();
-    e.stopImmediatePropagation();
-  }
-});
+await AuthService.fetchUser();

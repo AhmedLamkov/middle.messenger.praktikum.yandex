@@ -2,6 +2,11 @@ import { nanoid } from 'nanoid';
 import Handlebars from 'handlebars';
 import EventBus from './eventBus.ts';
 import type { BlockMeta, Props } from './types';
+import isEqual from '../utils/isEqual.ts';
+
+export interface PropsWithTagName extends Props {
+  tagName?: string;
+}
 
 // Нельзя создавать экземпляр данного класса
 export default class Block<T extends HTMLElement = any> {
@@ -34,7 +39,7 @@ export default class Block<T extends HTMLElement = any> {
    *
    * @returns {void}
    */
-  constructor(tagName = 'div', propsWithChildren: Props = {}) {
+  constructor({ tagName = 'div', ...propsWithChildren }: PropsWithTagName = {}) {
     const eventBus = new EventBus();
     this.eventBus = () => eventBus;
 
@@ -54,7 +59,7 @@ export default class Block<T extends HTMLElement = any> {
   }
 
   _registerEvents(eventBus: EventBus<string>) {
-    eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
+    eventBus.on(Block.EVENTS.INIT, this._init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
@@ -69,9 +74,14 @@ export default class Block<T extends HTMLElement = any> {
     }
   }
 
+  private _init() {
+    this.init();
+
+    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+  }
+
   init() {
     this._createResources();
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
   }
 
   _getChildrenAndProps({ elementProps, ...propsAndChildren }: Props) {
@@ -119,7 +129,7 @@ export default class Block<T extends HTMLElement = any> {
   }
 
   componentDidUpdate(oldProps: Props, newProps: Props) {
-    return JSON.stringify(oldProps) !== JSON.stringify(newProps);
+    return !isEqual(oldProps, newProps);
   }
 
   setProps = (nextProps: Props) => {
@@ -207,6 +217,7 @@ export default class Block<T extends HTMLElement = any> {
     }
 
     this._addEvents();
+    this.dispatchComponentDidMount();
   }
 
   render() {

@@ -1,0 +1,23 @@
+@use '../../colors';
+
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: colors.$light-grey;
+  padding: 0 18px;
+  height: 100vh;
+
+  &__icon {
+		cursor: pointer;
+		background: url(../../assets/icons/arrow-blue.svg);
+		background-size: contain;
+		background-repeat: no-repeat;
+		width: 28px;
+		height: 28px;
+	}
+}

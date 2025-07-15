@@ -5,6 +5,7 @@ export default defineConfig({
   root: '.',
   build: {
     outDir: 'dist',
+    target: 'esnext',
   },
   plugins: [eslint()],
 });

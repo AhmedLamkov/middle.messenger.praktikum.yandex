@@ -1,11 +1,15 @@
 import { Button, Input } from '../../components/index.ts';
 import Block from '../../core/block.ts';
 import type { Props } from '../../core/types';
+import { Routes } from '../../main.ts';
+import AuthService from '../../services/AuthService.ts';
+import { withRouter } from '../../utils/withRouter.ts';
 
-export default class LoginPage extends Block {
+class LoginPage extends Block {
   constructor(props: Props | undefined) {
-    super('div', {
+    super({
       ...props,
+      tagName: 'main',
       formState: {
         login: '',
         password: '',
@@ -36,8 +40,18 @@ export default class LoginPage extends Block {
       }),
       SignUpButton: new Button({
         label: 'Нет аккаунта?',
+        events: {
+          click: (e) => {
+            e.preventDefault();
+            window.router.go(Routes.Signup);
+          },
+        },
       }),
     });
+  }
+
+  componentDidMount(): void {
+    this.handleSubmit();
   }
 
   private ValidateLogin(e: Event) {
@@ -89,6 +103,24 @@ export default class LoginPage extends Block {
     }
   }
 
+  private handleSubmit() {
+    const form = document.querySelector('.login-form');
+    const login = this.children.login as Block;
+    const password = this.children.password as Block;
+    const loginElement = login.element?.querySelector('input') as HTMLInputElement;
+    const passwordElement = password.element?.querySelector('input') as HTMLInputElement;
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (loginElement.value.trim() === '' || passwordElement.value.trim() === '') {
+        return;
+      }
+      await AuthService.logoutUser();
+      await AuthService.loginUser({ login: loginElement.value, password: passwordElement.value });
+    });
+  }
+
   public render(): string {
     return `
       <div class="login">
@@ -107,3 +139,5 @@ export default class LoginPage extends Block {
     `;
   }
 }
+
+export default withRouter(LoginPage);

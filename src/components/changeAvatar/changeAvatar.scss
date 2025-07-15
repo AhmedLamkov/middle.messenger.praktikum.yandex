@@ -1,0 +1,47 @@
+@use '../../colors';
+
+.changeAvatar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: colors.$more-dark-grey;
+	width: 130px;
+	height: 130px;
+	border-radius: 50%;
+	margin: 0 auto;
+	margin-bottom: 21px;
+	cursor: pointer;
+
+	&:hover {
+		position: relative;
+
+		.changeAvatar__shadow {
+			position: absolute;
+			background: colors.$avatar-shadow;
+			opacity: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			height: 100%;
+			border-radius: 50%;
+		}
+
+		.changeAvatar__text {
+			font-size: 13px;
+			line-height: 14px;
+			font-weight: 500;
+			color: colors.$white;
+			max-width: 64px;
+		}
+	}
+
+  &__shadow {
+		display: none;
+	}
+	
+	&__image {
+		border-radius: 50%;
+		height: 100%;
+	}
+}

@@ -19,7 +19,12 @@
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "prefer-destructuring": ["error", {"object": true, "array": false}],
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "no-constructor-return": "off",
+    "no-restricted-syntax":"off",
+    "no-continue":"off",
+    "no-nested-ternary": "off",
+    "no-console":"off"
   },
   "env": {
     "browser": true,
