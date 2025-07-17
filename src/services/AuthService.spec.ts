@@ -1,147 +1,133 @@
-// /* eslint no-unused-expressions: 0 */
+import AuthService from './AuthService.ts';
+import { expect } from 'chai';
+import sinon from 'sinon';
+import { describe, beforeEach, it } from 'mocha';
+import esmock from 'esmock';
 
-// import { expect } from 'chai';
-// import sinon from 'sinon';
-// import { describe, beforeEach, it } from 'mocha';
-// import esmock from 'esmock';
-// import AuthService from './AuthService.ts';
+let AuthServiceType: typeof AuthService;
 
-// const mockFunctions = {
-//   signin: sinon.fake(),
-//   signup: sinon.fake(),
-//   logout: sinon.fake(),
-//   read: sinon.fake(),
-//   set: sinon.fake(),
-//   go: sinon.fake(),
-//   closeAll: sinon.fake(),
-// };
+const mockFunctions = {
+  login: sinon.fake(),
+  create: sinon.fake(),
+  logout: sinon.fake(),
+  me: sinon.fake(),
+  set: sinon.fake(),
+  go: sinon.fake(),
+};
 
-// let AuthService: typeof AuthService;
+describe('AuthService', async () => {
+  beforeEach(async () => {
+    AuthServiceType = (await esmock('./AuthService', {
+      '../api/AuthApi.ts': {
+        default: new class {
+          me = mockFunctions.me;
 
-// describe('AuthService', async () => {
-//   beforeEach(async () => {
-//     AuthService = (await esmock('./AuthService', {
-//       '../../api/AuthApi/AuthApi.ts': {
-//         default: new class {
-//           read = mockFunctions.read;
+          login = mockFunctions.login;
 
-//           signin = mockFunctions.signin;
+          create = mockFunctions.create;
 
-//           signup = mockFunctions.signup;
+          logout = mockFunctions.logout;
+        }(),
+      },
+      '../core/Store.ts': {
+        default:new class {
+          set = mockFunctions.set;
+        }(),
+      },
+      '../core/Router.ts': {
+        default: new class {
+          go = mockFunctions.go;
+        }(),
+      },
+    })).default;
+  });
 
-//           logout = mockFunctions.logout;
-//         }(),
-//       },
-//       '../../utils/Store/Store.ts': {
-//         default: new class {
-//           set = mockFunctions.set;
-//         }(),
-//       },
-//       '../../utils/Router/Router.ts': {
-//         default: new class {
-//           go = mockFunctions.go;
-//         }(),
-//       },
-//       '../MessagesController.ts': {
-//         default: new class {
-//           closeAll = mockFunctions.closeAll;
-//         }(),
-//       },
-//     })).default;
-//   });
+  describe('.fetchUser()', () => {
+    it('должен вызвать me() метод из api', async () => {
+      await AuthServiceType.fetchUser();
 
-//   describe('.fetchUser()', () => {
-//     it('should call read() method of api', async () => {
-//       await AuthService.fetchUser();
+      expect(mockFunctions.me.called)
+        .to.be.true;
+    });
 
-//       expect(mockFunctions.read.called)
-//         .to.be.true;
-//     });
+    it('должен сохранить user в store', async () => {
+      await AuthServiceType.fetchUser();
 
-//     it('should set user data in store', async () => {
-//       await AuthService.fetchUser();
+      expect(mockFunctions.set.lastCall.firstArg)
+        .to
+				.deep
+        .equals({user: undefined});
+    });
+  });
 
-//       expect(mockFunctions.set.lastCall.firstArg)
-//         .to
-//         .eq('user');
-//     });
-//   });
+  describe('.login()', () => {
+    it('должен перенаправить в /messenger', async () => {
+      await AuthServiceType.loginUser({
+        login: 'test',
+        password: 'test',
+      });
 
-//   describe('.signin()', () => {
-//     it('should redirect to /messenger', async () => {
-//       await AuthService.signin({
-//         login: 'kek',
-//         password: 'kek',
-//       });
+      expect(mockFunctions.go.lastCall.firstArg)
+        .to
+        .eq('/messenger');
+    });
 
-//       expect(mockFunctions.go.lastCall.firstArg)
-//         .to
-//         .eq('/messenger');
-//     });
+    it('должен вызвать login() метод из api', async () => {
+      await AuthServiceType.loginUser({
+        login: 'test',
+        password: 'test',
+      });
 
-//     it('should call signin() method of api', async () => {
-//       await AuthService.signin({
-//         login: 'kek',
-//         password: 'kek',
-//       });
+      expect(mockFunctions.login.called)
+        .to.be.true;
+    });
+  });
 
-//       expect(mockFunctions.signin.called)
-//         .to.be.true;
-//     });
-//   });
+  describe('.create()', () => {
+    it('должен перенаправить в /messenger', async () => {
+      await AuthServiceType.registerUser({
+        login: 'test',
+        password: 'test',
+        email: 'test',
+        first_name: 'test',
+        second_name: 'test',
+        phone: 'test',
+      });
 
-//   describe('.signup()', () => {
-//     it('should redirect to /messenger', async () => {
-//       await AuthService.signup({
-//         login: 'kek',
-//         password: 'kek',
-//         email: 'kek',
-//         first_name: 'kek',
-//         second_name: 'kek',
-//         phone: 'kek',
-//       });
+      expect(mockFunctions.go.lastCall.firstArg)
+        .to
+        .eq('/messenger');
+    });
 
-//       expect(mockFunctions.go.lastCall.firstArg)
-//         .to
-//         .eq('/messenger');
-//     });
+    it('должен вызвать create() метод из api', async () => {
+      await AuthServiceType.registerUser({
+        login: 'test',
+        password: 'test',
+        email: 'test',
+        first_name: 'test',
+        second_name: 'test',
+        phone: 'test',
+      });
 
-//     it('should call signup() method of api', async () => {
-//       await AuthService.signup({
-//         login: 'kek',
-//         password: 'kek',
-//         email: 'kek',
-//         first_name: 'kek',
-//         second_name: 'kek',
-//         phone: 'kek',
-//       });
+      expect(mockFunctions.create.called)
+        .to.be.true;
+    });
+  });
 
-//       expect(mockFunctions.signup.called)
-//         .to.be.true;
-//     });
-//   });
+  describe('.logout()', () => {
+    it('должен вызвать logout() метод из api', () => {
+      AuthServiceType.logoutUser();
 
-//   describe('.logout()', () => {
-//     it('should call closeAll() method of MessagesController', () => {
-//       AuthService.logout();
+      expect(mockFunctions.logout.called)
+        .to.be.true;
+    });
 
-//       expect(mockFunctions.closeAll.called)
-//         .to.be.true;
-//     });
+    it('должен перенаправить в  navigate', () => {
+      AuthServiceType.logoutUser();
 
-//     it('should call logout() method of api', () => {
-//       AuthService.logout();
-
-//       expect(mockFunctions.logout.called)
-//         .to.be.true;
-//     });
-
-//     it('should redirect to /', () => {
-//       AuthService.logout();
-
-//       expect(mockFunctions.go.lastCall.firstArg)
-//         .to
-//         .eq('/');
-//     });
-//   });
-// });
+      expect(mockFunctions.go.lastCall.firstArg)
+        .to
+        .eq('navigate');
+    });
+  });
+});

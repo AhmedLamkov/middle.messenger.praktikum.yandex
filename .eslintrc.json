@@ -1,7 +1,7 @@
 {
   "extends": "airbnb",
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint/eslint-plugin" , "chai-friendly"],
+  "plugins": ["@typescript-eslint/eslint-plugin"],
   "rules": {
     "max-len": [2, 150],
     "max-params": [2, 3],

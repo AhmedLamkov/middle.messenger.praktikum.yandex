@@ -58,10 +58,10 @@ export interface ChangePasswordData {
 
 export interface ChatInfo {
   id: number;
-  title: string;
+  title?: string;
   avatar?: string;
   unread_count?: number
-  created_by: number;
+  created_by?: number;
   last_message?: {
     user: {
       first_name: string;

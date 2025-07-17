@@ -1,4 +1,5 @@
 import type { messageProps } from '../api/type.ts';
+import Store from '../core/Store.ts';
 import WSTransport, { WSTransportEvents } from '../core/WSTransport.ts';
 
 class MessagesService {
@@ -9,7 +10,7 @@ class MessagesService {
       return;
     }
 
-    const userId = window.store.getState().user?.id;
+    const userId = Store.getState().user?.id;
 
     const wsTransport = new WSTransport(`wss://ya-praktikum.tech/ws/chats/${userId}/${id}/${token}`);
 
@@ -57,12 +58,12 @@ class MessagesService {
       messagesToAdd.push(messages);
     }
 
-    const { messages: oldMessages = {} } = window.store.getState();
+    const { messages: oldMessages = {} } = Store.getState();
     const currentMessages = oldMessages[id] || [];
 
     messagesToAdd = [...currentMessages, ...messagesToAdd];
 
-    window.store.set({ messages: { ...oldMessages, [id]: messagesToAdd } });
+    Store.set({ messages: { ...oldMessages, [id]: messagesToAdd } });
   }
 
   private onClose(id: number) {

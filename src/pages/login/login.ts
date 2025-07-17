@@ -1,5 +1,6 @@
 import { Button, Input } from '../../components/index.ts';
 import Block from '../../core/block.ts';
+import Router from '../../core/Router.ts';
 import type { Props } from '../../core/types';
 import { Routes } from '../../main.ts';
 import AuthService from '../../services/AuthService.ts';
@@ -43,7 +44,7 @@ class LoginPage extends Block {
         events: {
           click: (e) => {
             e.preventDefault();
-            window.router.go(Routes.Signup);
+            Router.go(Routes.Signup);
           },
         },
       }),

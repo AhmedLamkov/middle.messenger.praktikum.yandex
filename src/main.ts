@@ -5,7 +5,7 @@ import * as Components from './components/index.ts';
 import * as Pages from './pages/index.ts';
 
 import Router from './core/Router.ts';
-import { Store } from './core/Store.ts';
+import Store from './core/Store.ts';
 import AuthService from './services/AuthService.ts';
 
 export const Routes = {
@@ -27,19 +27,20 @@ Object.entries(Components).forEach(([name, template]) => {
   Handlebars.registerPartial(name, template);
 });
 
-window.store = new Store({});
-
+window.store = Store;
 window.router = Router;
-window.router
-  .use(Routes.Login, Pages.LoginPage)
-  .use(Routes.Messenger, Pages.ChatsPage)
-  .use(Routes.Settings, Pages.EditProfilePage)
-  .use(Routes.ServerError, Pages.ErrorPage)
-  .use(Routes.notFound, Pages.NotFoundPage)
-  .use(Routes.Profile, Pages.ProfilePage)
-  .use(Routes.Signup, Pages.RegisterPage)
-  .use(Routes.ResetPassword, Pages.ResetPasswordPage)
-  .use(Routes.Navigate, Pages.NavigatePage)
-  .start();
+window.addEventListener('DOMContentLoaded', async () => {
+  window.router
+    .use(Routes.Login, Pages.LoginPage)
+    .use(Routes.Messenger, Pages.ChatsPage)
+    .use(Routes.Settings, Pages.EditProfilePage)
+    .use(Routes.ServerError, Pages.ErrorPage)
+    .use(Routes.notFound, Pages.NotFoundPage)
+    .use(Routes.Profile, Pages.ProfilePage)
+    .use(Routes.Signup, Pages.RegisterPage)
+    .use(Routes.ResetPassword, Pages.ResetPasswordPage)
+    .use(Routes.Navigate, Pages.NavigatePage)
+    .start();
 
-await AuthService.fetchUser();
+  await AuthService.fetchUser();
+});

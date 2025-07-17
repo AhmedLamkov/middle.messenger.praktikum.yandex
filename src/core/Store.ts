@@ -5,7 +5,7 @@ export const StoreEvents = {
   Updated: 'UPDATED',
 } as const;
 
-export class Store extends EventBus<string> {
+class Store extends EventBus<string> {
   private state: State = {};
 
   static __instance: Store;
@@ -34,3 +34,5 @@ export class Store extends EventBus<string> {
     this.emit(StoreEvents.Updated, prevState, nextState);
   }
 }
+
+export default new Store({});
