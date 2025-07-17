@@ -27,6 +27,7 @@
     ]
   },
   "ts-node": {
+    "experimentalSpecifierResolution": "node",
     "files": true
   },
   "include": ["src", "./src/index.d.ts"],
