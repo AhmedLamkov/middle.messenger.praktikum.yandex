@@ -1,7 +1,7 @@
 {
   "extends": "airbnb",
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint/eslint-plugin"],
+  "plugins": ["@typescript-eslint/eslint-plugin" , "chai-friendly"],
   "rules": {
     "max-len": [2, 150],
     "max-params": [2, 3],
@@ -12,7 +12,7 @@
     "operator-linebreak": "off",
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",
-    "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
+    "no-unused-expressions": 0,
     "no-shadow": "off",
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "error",

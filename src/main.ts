@@ -29,8 +29,7 @@ Object.entries(Components).forEach(([name, template]) => {
 
 window.store = new Store({});
 
-const APP_ROOT_ELEMNT = '#app';
-window.router = new Router(APP_ROOT_ELEMNT);
+window.router = Router;
 window.router
   .use(Routes.Login, Pages.LoginPage)
   .use(Routes.Messenger, Pages.ChatsPage)

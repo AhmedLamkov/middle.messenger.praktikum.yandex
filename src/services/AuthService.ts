@@ -39,7 +39,6 @@ class AuthService {
     try {
       await AuthApi.logout();
       window.router.go(Routes.Navigate);
-      console.log('test');
     } catch (responsError:any) {
       const error = await responsError.json();
       window.store.set({ loginError: error.reason });

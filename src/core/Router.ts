@@ -10,9 +10,9 @@ class Router {
 
   private history = window.history;
 
-  static __instance: Router;
+  static __instance?: Router;
 
-  constructor(rootQuery: string) {
+  constructor(rootQuery?: string) {
     if (Router.__instance) {
       return Router.__instance;
     }
@@ -22,6 +22,13 @@ class Router {
     this._rootQuery = rootQuery;
 
     Router.__instance = this;
+  }
+
+  public reset() {
+    delete Router.__instance;
+
+    // eslint-disable-next-line no-new
+    new Router(this._rootQuery);
   }
 
   use(pathname: string, block: Block) {
@@ -83,4 +90,4 @@ class Router {
   }
 }
 
-export default Router;
+export default new Router('#app');
