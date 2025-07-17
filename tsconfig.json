@@ -24,7 +24,7 @@
       "vite/client",
       "mocha",
       "node"
-    ],
+    ]
   },
   "ts-node": {
     "files": true
