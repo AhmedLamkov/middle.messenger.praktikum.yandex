@@ -21,7 +21,7 @@ describe('MessageList', () => {
   });
 
   it('должен рендерить дочерний элемент', () => {
-    const messages = { 
+    const messages = {
       1: [
         {
           chat_id: 1,
@@ -37,7 +37,7 @@ describe('MessageList', () => {
             content_type: 'test',
             content_size: 1,
             upload_date: 'test',
-          }
+          },
         },
         {
           chat_id: 1,
@@ -53,9 +53,10 @@ describe('MessageList', () => {
             content_type: 'test',
             content_size: 2,
             upload_date: 'test',
-          }
-        }
-    ]};
+          },
+        },
+      ],
+    };
 
     const messageList = new MessageList({
       selectedChat: 1,

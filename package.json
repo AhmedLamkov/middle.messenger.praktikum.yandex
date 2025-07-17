@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "stylelint": "stylelint src/**/*.scss",
     "lint": "eslint \"src/**/*.ts\"",
-    "test": "mocha"
+    "test": "mocha",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/chai": "^5.2.2",
@@ -34,6 +35,7 @@
     "eslint-plugin-chai-friendly": "^1.1.0",
     "esmock": "^2.7.1",
     "express": "^5.1.0",
+    "init": "^0.1.2",
     "jsdom": "^26.1.0",
     "sass": "^1.88.0",
     "sinon": "^21.0.0",

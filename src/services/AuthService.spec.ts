@@ -1,8 +1,8 @@
-import AuthService from './AuthService.ts';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { describe, beforeEach, it } from 'mocha';
 import esmock from 'esmock';
+import AuthService from './AuthService.ts';
 
 let AuthServiceType: typeof AuthService;
 
@@ -30,7 +30,7 @@ describe('AuthService', async () => {
         }(),
       },
       '../core/Store.ts': {
-        default:new class {
+        default: new class {
           set = mockFunctions.set;
         }(),
       },
@@ -55,8 +55,8 @@ describe('AuthService', async () => {
 
       expect(mockFunctions.set.lastCall.firstArg)
         .to
-				.deep
-        .equals({user: undefined});
+        .deep
+        .equals({ user: undefined });
     });
   });
 
