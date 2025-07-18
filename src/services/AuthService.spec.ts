@@ -18,7 +18,7 @@ const mockFunctions = {
 describe('AuthService', async () => {
   beforeEach(async () => {
     AuthServiceType = (await esmock('./AuthService', {
-      '../api/AuthApi.ts': {
+      '../api/authApi.ts': {
         default: new class {
           me = mockFunctions.me;
 
