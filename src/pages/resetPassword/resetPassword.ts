@@ -6,6 +6,7 @@ import { withRouter } from '../../utils/withRouter.ts';
 import UsersService from '../../services/UsersService.ts';
 import withStore from '../../utils/withStore.ts';
 import { Routes } from '../../main.ts';
+import Router from '../../core/Router.ts';
 
 class ResetPasswordPage extends Block {
   constructor(props: Props) {
@@ -13,7 +14,7 @@ class ResetPasswordPage extends Block {
       ...props,
       tagName: 'main',
       BackButton: new BackButton({
-        onClick: () => window.router.go(Routes.Profile),
+        onClick: () => Router.go(Routes.Profile),
       }),
       oldPassword: new Input({
         value: props.user && props.user.password,

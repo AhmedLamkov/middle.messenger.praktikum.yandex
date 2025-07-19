@@ -12,7 +12,7 @@
     "operator-linebreak": "off",
     "class-methods-use-this": "off",
     "no-underscore-dangle": "off",
-    "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
+    "no-unused-expressions": 0,
     "no-shadow": "off",
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "error",
@@ -24,7 +24,9 @@
     "no-restricted-syntax":"off",
     "no-continue":"off",
     "no-nested-ternary": "off",
-    "no-console":"off"
+    "no-console":"off",
+    "no-new": "off",
+    "max-classes-per-file": "off"
   },
   "env": {
     "browser": true,

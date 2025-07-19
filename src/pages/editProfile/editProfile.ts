@@ -10,6 +10,7 @@ import withStore from '../../utils/withStore.ts';
 import AuthService from '../../services/AuthService.ts';
 import UsersService from '../../services/UsersService.ts';
 import { Routes } from '../../main.ts';
+import Router from '../../core/Router.ts';
 
 class EditProfilePage extends Block {
   constructor(props: State) {
@@ -47,7 +48,7 @@ class EditProfilePage extends Block {
         },
       }),
       BackButton: new BackButton({
-        onClick: () => window.router.go(Routes.Profile),
+        onClick: () => Router.go(Routes.Profile),
       }),
       formState: {
         login: '',

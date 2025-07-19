@@ -5,6 +5,7 @@ import { withRouter } from '../../utils/withRouter.ts';
 import withStore from '../../utils/withStore.ts';
 import AuthService from '../../services/AuthService.ts';
 import { Routes } from '../../main.ts';
+import Router from '../../core/Router.ts';
 
 class ProfilePage extends Block {
   constructor(props: State) {
@@ -22,7 +23,7 @@ class ProfilePage extends Block {
         },
       }),
       BackButton: new BackButton({
-        onClick: () => window.router.go(Routes.Messenger),
+        onClick: () => Router.go(Routes.Messenger),
       }),
     });
   }

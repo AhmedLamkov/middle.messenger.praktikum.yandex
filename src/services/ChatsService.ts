@@ -1,4 +1,6 @@
 import ChatsApi from '../api/chatsApi.ts';
+import Router from '../core/Router.ts';
+import Store from '../core/Store.ts';
 import { Routes } from '../main.ts';
 import MessagesService from './MessagesService.ts';
 
@@ -10,7 +12,7 @@ export class ChatsService {
       this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(Routes.ServerError);
+      Router.go(Routes.ServerError);
     }
   }
 
@@ -25,7 +27,7 @@ export class ChatsService {
         }
       });
 
-      window.store.set({ chats });
+      Store.set({ chats });
     } catch (e: any) {
       console.error(e);
     }
@@ -37,7 +39,7 @@ export class ChatsService {
       await this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(Routes.ServerError);
+      Router.go(Routes.ServerError);
     }
   }
 
@@ -48,7 +50,7 @@ export class ChatsService {
       this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(Routes.ServerError);
+      Router.go(Routes.ServerError);
     }
   }
 
@@ -58,7 +60,7 @@ export class ChatsService {
       await this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(Routes.ServerError);
+      Router.go(Routes.ServerError);
     }
 
     return null;
@@ -69,14 +71,14 @@ export class ChatsService {
       return ChatsApi.getChatToken(id);
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(Routes.ServerError);
+      Router.go(Routes.ServerError);
     }
 
     return null;
   }
 
   selectChat(id: number) {
-    window.store.set({ selectedChat: id });
+    Store.set({ selectedChat: id });
   }
 
   async getChatUsers(id: number) {
@@ -84,7 +86,7 @@ export class ChatsService {
       return ChatsApi.getUsers(id);
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(Routes.ServerError);
+      Router.go(Routes.ServerError);
     }
 
     return null;
@@ -96,7 +98,7 @@ export class ChatsService {
       await this.fetchChats();
     } catch (e: any) {
       console.error(e.message);
-      window.router.go(Routes.ServerError);
+      Router.go(Routes.ServerError);
     }
   }
 }
